@@ -1,0 +1,8 @@
+node_modules/
+dist/
+bridge/node_modules/
+bridge/node.exe
+*.log
+.env
+.DS_Store
+Thumbs.db
