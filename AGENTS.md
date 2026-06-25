@@ -31,3 +31,4 @@ The release bundle is `dist/cursor-api/` (`cursor-api.exe` + `bridge/`).
 - The same workflow builds the Windows zip on `v*` tag pushes (GitHub releases only — not npm).
 - `scripts/release.ts` — release CLI (`tag`, `zip`, `upload`) for CI and local builds
 - Changelog lives in `CHANGELOG.md`; release notes come from Changesets.
+- Run `bun run knip` to check for unused exports and dependencies.
