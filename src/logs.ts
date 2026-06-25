@@ -3,6 +3,7 @@ import {
   existsSync,
   openSync,
   readFileSync,
+  readdirSync,
   statSync,
 } from "node:fs";
 import path from "node:path";
@@ -10,7 +11,7 @@ import { setTimeout } from "node:timers/promises";
 
 import { logsDir, ensureConfigDirs } from "@/config";
 
-type LogChannel = "server" | "bridge" | "daemon";
+export type LogChannel = "server" | "bridge" | "daemon";
 
 const logChannelLabel = (file: string): LogChannel => {
   if (file.includes("bridge")) {
@@ -109,4 +110,11 @@ export const followLogs = async (
   };
 
   await poll();
+};
+
+export const listLogFiles = (): string[] => {
+  ensureConfigDirs();
+  return readdirSync(logsDir())
+    .filter((name) => name.endsWith(".log"))
+    .map((name) => path.join(logsDir(), name));
 };

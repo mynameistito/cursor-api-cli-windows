@@ -1,5 +1,11 @@
 import { execFile } from "node:child_process";
-import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
@@ -10,7 +16,7 @@ import { GITHUB_REPO, VERSION } from "./version";
 
 const execFileAsync = promisify(execFile);
 
-interface ReleaseInfo {
+export interface ReleaseInfo {
   version: string;
   tag: string;
   downloadUrl: string;
@@ -36,7 +42,10 @@ const parseSemver = (value: string): number[] =>
     .split(".")
     .map((part) => Number.parseInt(part, 10) || 0);
 
-const compareSemver = function compareSemver(a: string, b: string): number {
+export const compareSemver = function compareSemver(
+  a: string,
+  b: string
+): number {
   const av = parseSemver(a);
   const bv = parseSemver(b);
   const len = Math.max(av.length, bv.length);
@@ -49,7 +58,7 @@ const compareSemver = function compareSemver(a: string, b: string): number {
   return 0;
 };
 
-const fetchLatestRelease =
+export const fetchLatestRelease =
   async function fetchLatestRelease(): Promise<ReleaseInfo | null> {
     const res = await fetch(
       `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`,
@@ -206,4 +215,26 @@ export const recordUpdateCheck = function recordUpdateCheck(
     `${JSON.stringify({ checkedAt: new Date().toISOString(), ...result }, null, 2)}\n`,
     "utf-8"
   );
+};
+
+export const readLastUpdateCheck = function readLastUpdateCheck(): Record<
+  string,
+  unknown
+> | null {
+  const filePath = path.join(
+    process.env.APPDATA || "",
+    "cursor-api",
+    "update-check.json"
+  );
+  if (!existsSync(filePath)) {
+    return null;
+  }
+  try {
+    return JSON.parse(readFileSync(filePath, "utf-8")) as Record<
+      string,
+      unknown
+    >;
+  } catch {
+    return null;
+  }
 };

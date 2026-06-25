@@ -151,7 +151,7 @@ interface StreamInput {
   ) => void;
 }
 
-interface HttpServerHandle {
+export interface HttpServerHandle {
   port: number;
   close: () => Promise<void>;
 }
@@ -1221,7 +1221,7 @@ const handleHttpRequest = async function handleHttpRequest(
   }
 };
 
-const parsePort = function parsePort(raw = process.env.PORT): number {
+export const parsePort = function parsePort(raw = process.env.PORT): number {
   if (!raw) {
     return DEFAULT_PORT;
   }

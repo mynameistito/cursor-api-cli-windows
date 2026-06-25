@@ -29,7 +29,7 @@ export class HttpError extends Error {
   }
 }
 
-const withCors = (response: Response): Response => {
+export const withCors = (response: Response): Response => {
   const headers = new Headers(response.headers);
   for (const [key, value] of Object.entries(CORS_HEADERS)) {
     headers.set(key, value);
@@ -40,6 +40,12 @@ const withCors = (response: Response): Response => {
     statusText: response.statusText,
   });
 };
+
+export const optionsResponse = (): Response =>
+  new Response(null, {
+    headers: CORS_HEADERS,
+    status: 204,
+  });
 
 export const json = (data: unknown, init: ResponseInit = {}): Response =>
   withCors(
@@ -76,6 +82,24 @@ export const unauthorized = (
 
 export const notFound = (): Response =>
   openAiError("Not found", 404, "not_found");
+
+export const bearerToken = (request: Request): string | undefined => {
+  const authorization = request.headers.get("authorization") || "";
+  const match = /^Bearer\s+(?<token>.+)$/iu.exec(authorization.trim());
+  if (match?.groups?.token) {
+    return match.groups.token.trim();
+  }
+  const apiKey = request.headers.get("x-api-key");
+  return apiKey?.trim() || undefined;
+};
+
+export const parseJsonBody = <T = unknown>(request: Request): Promise<T> => {
+  const contentType = request.headers.get("content-type") || "";
+  if (contentType && !contentType.toLowerCase().includes("application/json")) {
+    throw new HttpError("Content-Type must be application/json", 415);
+  }
+  return request.json() as Promise<T>;
+};
 
 export const errorResponse = (error: unknown): Response => {
   if (error instanceof HttpError) {

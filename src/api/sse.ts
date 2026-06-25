@@ -1,7 +1,7 @@
 const decoder = new TextDecoder();
 const encoder = new TextEncoder();
 
-interface SseEvent {
+export interface SseEvent {
   id?: string;
   event?: string;
   data: string;
