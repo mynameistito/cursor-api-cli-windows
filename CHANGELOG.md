@@ -1,5 +1,11 @@
 # cursor-api-cli-windows
 
+## 0.1.1
+
+### Patch Changes
+
+- 2cc294c: Add knip checks and remove unused Worker-era API code
+
 ## 0.1.0
 
 ### Initial release
