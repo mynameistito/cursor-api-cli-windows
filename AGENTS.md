@@ -11,6 +11,7 @@
 - `src/server.ts` — in-process OpenAI-compatible HTTP server
 - `src/bridge.ts` — spawns bundled Node SDK bridge
 - `src/api/` — shared API translation layer
+- `scripts/changeset-add.ts` — non-interactive Changesets helper for agents
 
 ## Build
 
@@ -20,3 +21,13 @@ bun run build
 ```
 
 The release bundle is `dist/cursor-api/` (`cursor-api.exe` + `bridge/`).
+
+## Releases
+
+- Add `.changeset/*.md` files for user-facing changes.
+- Agents: `bun run changeset-add <patch|minor|major> "<summary>"` (writes a changeset without prompts).
+- Humans: `bun run changeset` (interactive Changesets CLI).
+- Merging to `main` triggers `.github/workflows/release.yml` (Changesets version PR, or tag + build on publish).
+- The same workflow builds the Windows zip when a `v*` tag is pushed or Changesets publishes.
+- `scripts/release.ts` — release CLI (`tag`, `zip`, `upload`) for CI and local builds
+- Changelog lives in `CHANGELOG.md`; release notes come from Changesets.

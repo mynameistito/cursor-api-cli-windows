@@ -106,7 +106,15 @@ bun run typecheck
 bun run build
 ```
 
-Release builds are produced by GitHub Actions when you push a tag (`v0.1.0`).
+### Releases and changelog
+
+Releases are managed with [Changesets](https://github.com/changesets/changesets):
+
+1. Add a changeset when your PR includes user-facing changes: `bun run changeset`
+2. Merge to `main` — the **Release** workflow opens a “chore: version packages” PR when changesets are pending
+3. Merge that PR — Changesets bumps `package.json`, updates `CHANGELOG.md`, tags `v*`, builds the Windows zip, and uploads it to the GitHub release
+
+One workflow (`.github/workflows/release.yml`) handles versioning and Windows release builds.
 
 ---
 
