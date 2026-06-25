@@ -27,7 +27,7 @@ The release bundle is `dist/cursor-api/` (`cursor-api.exe` + `bridge/`).
 - Add `.changeset/*.md` files for user-facing changes.
 - Agents: `bun run changeset-add <patch|minor|major> "<summary>"` (writes a changeset without prompts).
 - Humans: `bun run changeset` (interactive Changesets CLI).
-- Merging to `main` triggers `.github/workflows/version.yml` (Changesets version PR or tag + GitHub release).
-- Pushing a `v*` tag triggers `.github/workflows/release.yml` (build zip artifact).
+- Merging to `main` triggers `.github/workflows/release.yml` (Changesets version PR, or tag + build on publish).
+- The same workflow builds the Windows zip when a `v*` tag is pushed or Changesets publishes.
 - `scripts/upload-release.ts` uploads release zips via the GitHub REST API (`bun run release:upload`).
 - Changelog lives in `CHANGELOG.md`; release notes come from Changesets.
