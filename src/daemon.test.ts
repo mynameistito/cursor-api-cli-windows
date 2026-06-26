@@ -1,6 +1,11 @@
+import { createHash } from "node:crypto";
+
 import { describe, expect, it } from "vitest";
 
 import { runningConfigMatches, tasklistOutputContainsPid } from "@/daemon";
+
+const apiKeyFingerprint = (apiKey: string): string =>
+  createHash("sha256").update(apiKey.trim()).digest("hex").slice(0, 16);
 
 describe(tasklistOutputContainsPid, () => {
   it("returns true when stdout lists the PID", () => {
@@ -27,32 +32,35 @@ describe(tasklistOutputContainsPid, () => {
 });
 
 describe(runningConfigMatches, () => {
-  it("returns true when state port matches", () => {
+  const apiKey = "crsr_test_key_12345";
+
+  it("returns true when port and API key fingerprint match", () => {
     expect(
       runningConfigMatches(
         {
+          apiKeyFingerprint: apiKeyFingerprint(apiKey),
           bridgePort: null,
           pid: 1,
           port: 8787,
           startedAt: "2026-01-01T00:00:00.000Z",
         },
-        8787
+        8787,
+        apiKey
       )
     ).toBeTruthy();
   });
 
-  it("returns false when state is null or port differs", () => {
-    expect(runningConfigMatches(null, 8787)).toBeFalsy();
-    expect(
-      runningConfigMatches(
-        {
-          bridgePort: null,
-          pid: 1,
-          port: 8787,
-          startedAt: "2026-01-01T00:00:00.000Z",
-        },
-        9000
-      )
-    ).toBeFalsy();
+  it("returns false when state is null, port differs, or API key differs", () => {
+    const state = {
+      apiKeyFingerprint: apiKeyFingerprint(apiKey),
+      bridgePort: null,
+      pid: 1,
+      port: 8787,
+      startedAt: "2026-01-01T00:00:00.000Z",
+    };
+    expect(runningConfigMatches(null, 8787, apiKey)).toBeFalsy();
+    expect(runningConfigMatches(state, 9000, apiKey)).toBeFalsy();
+    expect(runningConfigMatches(state, 8787, "crsr_different_key")).toBeFalsy();
+    expect(runningConfigMatches(state, 8787, apiKey)).toBeTruthy();
   });
 });
