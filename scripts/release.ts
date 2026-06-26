@@ -137,7 +137,7 @@ const buildGitHubClient = (token: string, repository: string) => {
     const response = await request(`${apiBase}/releases`, {
       body: JSON.stringify({
         generate_release_notes: true,
-        make_latest: true,
+        make_latest: "true",
         tag_name: releaseTag,
       }),
       headers: {
@@ -157,7 +157,7 @@ const buildGitHubClient = (token: string, repository: string) => {
 
   const markLatest = async (releaseId: number): Promise<void> => {
     await request(`${apiBase}/releases/${releaseId}`, {
-      body: JSON.stringify({ make_latest: true }),
+      body: JSON.stringify({ make_latest: "true" }),
       headers: {
         "Content-Type": "application/json",
       },
