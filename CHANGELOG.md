@@ -1,5 +1,11 @@
 # cursor-api-cli-windows
 
+## 0.1.5
+
+### Patch Changes
+
+- 176810d: Remove deprecated baseUrl from tsconfig for TypeScript 6, one-shot release workflow, and switch typecheck to @typescript/native-preview (tsgo)
+
 ## 0.1.4
 
 ### Patch Changes
