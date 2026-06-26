@@ -59,7 +59,7 @@ const buildProgram = (): Command => {
       await writeApiKey(value);
       console.log("API key saved.");
       console.log(
-        "Restart the server if it is already running: cursor-api restart"
+        "Run cursor-api start to apply the change if the server is already running."
       );
     });
 
