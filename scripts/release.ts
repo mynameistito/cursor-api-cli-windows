@@ -35,7 +35,9 @@ const resolveReleaseTag = (published?: boolean): string => {
   const githubRefName = process.env.GITHUB_REF_NAME ?? "";
   const isPublished =
     published ??
-    (process.env.PUBLISHED === "true" || process.env.PUBLISHED === "1");
+    (process.env.PUBLISHED === "true" ||
+      process.env.PUBLISHED === "1" ||
+      process.env.GITHUB_EVENT_NAME === "workflow_dispatch");
 
   if (githubRef.startsWith("refs/tags/v")) {
     return githubRefName;
