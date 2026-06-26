@@ -1,5 +1,11 @@
 # cursor-api-cli-windows
 
+## 0.1.4
+
+### Patch Changes
+
+- 571e62f: - no changes, rebuilt as imuutibility was on.
+
 ## 0.1.3
 
 ### Patch Changes
