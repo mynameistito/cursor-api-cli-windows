@@ -1,4 +1,5 @@
 import { spawn, execFile } from "node:child_process";
+import { createHash } from "node:crypto";
 import { existsSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { setTimeout } from "node:timers/promises";
 import { promisify } from "node:util";
@@ -24,7 +25,12 @@ interface DaemonState {
   port: number;
   bridgePort: number | null;
   startedAt: string;
+  apiKeyFingerprint?: string;
 }
+
+const apiKeyFingerprint = function apiKeyFingerprint(apiKey: string): string {
+  return createHash("sha256").update(apiKey.trim()).digest("hex").slice(0, 16);
+};
 
 const readPid = function readPid(): number | null {
   if (!existsSync(pidFilePath())) {
@@ -136,9 +142,13 @@ export const getStatus = async function getStatus(): Promise<{
 
 export const runningConfigMatches = function runningConfigMatches(
   state: DaemonState | null,
-  port: number
+  port: number,
+  apiKey: string
 ): boolean {
-  return state !== null && state.port === port;
+  if (state === null || state.port !== port) {
+    return false;
+  }
+  return state.apiKeyFingerprint === apiKeyFingerprint(apiKey);
 };
 
 const spawnDaemon = function spawnDaemon(port: number): void {
@@ -188,18 +198,30 @@ export const stopDaemon = async function stopDaemon(options?: {
 
 export const startDaemon = async function startDaemon(): Promise<void> {
   const settings = loadSettings();
+  const apiKey = await readApiKey();
   const status = await getStatus();
   const state = readState();
   if (status.running) {
-    if (runningConfigMatches(state, settings.port)) {
+    if (runningConfigMatches(state, settings.port, apiKey)) {
       console.log(`cursor-api is already running (pid ${status.pid})`);
       console.log(`Base URL: ${baseUrl(settings.port)}`);
       return;
     }
-    const previousPort = state?.port ?? status.port;
-    console.log(
-      `Port changed (${previousPort} -> ${settings.port}); restarting cursor-api...`
-    );
+    const portChanged = state !== null && state.port !== settings.port;
+    const keyChanged =
+      state !== null &&
+      state.apiKeyFingerprint !== undefined &&
+      state.apiKeyFingerprint !== apiKeyFingerprint(apiKey);
+    if (portChanged) {
+      const previousPort = state?.port ?? status.port;
+      console.log(
+        `Port changed (${previousPort} -> ${settings.port}); restarting cursor-api...`
+      );
+    } else if (keyChanged) {
+      console.log("API key changed; restarting cursor-api...");
+    } else {
+      console.log("Configuration changed; restarting cursor-api...");
+    }
     await stopDaemon({ quiet: true });
     await setTimeout(500);
   }
@@ -241,6 +263,7 @@ export const runDaemonForeground =
     }
     const server = await startHttpServer(settings.port);
     writeState({
+      apiKeyFingerprint: apiKeyFingerprint(apiKey),
       bridgePort: bridge?.port ?? null,
       pid: process.pid,
       port: settings.port,
