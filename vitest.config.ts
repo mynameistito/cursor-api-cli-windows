@@ -6,6 +6,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "src"),
+      "@package": path.resolve(import.meta.dirname, "package.json"),
     },
   },
   test: {

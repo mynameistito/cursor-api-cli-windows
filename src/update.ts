@@ -37,7 +37,10 @@ const parseSemver = (value: string): number[] =>
     .split(".")
     .map((part) => Number.parseInt(part, 10) || 0);
 
-const compareSemver = function compareSemver(a: string, b: string): number {
+export const compareSemver = function compareSemver(
+  a: string,
+  b: string
+): number {
   const av = parseSemver(a);
   const bv = parseSemver(b);
   const len = Math.max(av.length, bv.length);
@@ -162,7 +165,7 @@ Copy-Item -LiteralPath '${psQuote(path.join(sourceDir, "cursor-api.exe"))}' -Des
   await runPowerShell(script);
 };
 
-const isUpdatingInstalledBinary = function isUpdatingInstalledBinary(
+export const isUpdatingInstalledBinary = function isUpdatingInstalledBinary(
   targetDir: string
 ): boolean {
   const installedExe = path.join(targetDir, "cursor-api.exe");
