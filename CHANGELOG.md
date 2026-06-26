@@ -1,5 +1,11 @@
 # cursor-api-cli-windows
 
+## 0.1.3
+
+### Patch Changes
+
+- b36b1fb: Fix release workflow so version PR merges tag and build Windows artifacts in one run
+
 ## 0.1.2
 
 ### Patch Changes
