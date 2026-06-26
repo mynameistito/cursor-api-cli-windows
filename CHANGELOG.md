@@ -1,5 +1,13 @@
 # cursor-api-cli-windows
 
+## 0.1.7
+
+### Patch Changes
+
+- 73fe418: Restart daemon on start when API key changes
+- e2416cc: Fix self-update when cursor-api.exe is in use by the updater process
+- 4013901: Fix stale daemon status when PID is no longer running
+
 ## 0.1.6
 
 ### Patch Changes
