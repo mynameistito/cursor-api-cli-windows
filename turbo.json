@@ -3,18 +3,19 @@
   "ui": "tui",
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "generate-routes"],
       "outputs": ["dist/**", ".output/**"]
     },
     "dev": {
+      "dependsOn": ["generate-routes"],
       "cache": false,
       "persistent": true
     },
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build", "generate-routes"]
     },
     "typecheck": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build", "generate-routes"]
     },
     "check": {},
     "knip": {},

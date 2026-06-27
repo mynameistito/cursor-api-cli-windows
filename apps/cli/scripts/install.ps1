@@ -125,9 +125,10 @@ function Install-Release {
   if (Test-Path $extractDir) { Remove-Item -Recurse -Force $extractDir }
   Expand-Archive -Path $zipPath -DestinationPath $extractDir -Force
 
-  if (-not (Test-Path $InstallDir)) {
-    New-Item -ItemType Directory -Path $InstallDir -Force | Out-Null
+  if (Test-Path $InstallDir) {
+    Remove-Item -Recurse -Force $InstallDir
   }
+  New-Item -ItemType Directory -Path $InstallDir -Force | Out-Null
 
   Copy-Item -Path (Join-Path $extractDir '*') -Destination $InstallDir -Recurse -Force
   Remove-Item -Recurse -Force $tempRoot

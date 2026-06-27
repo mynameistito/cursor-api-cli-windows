@@ -20,7 +20,7 @@
     "url": "git+https://github.com/mynameistito/cursor-api-cli-windows.git"
   },
   "bin": {
-    "cursor-api": "./dist/cursor-api.exe"
+    "cursor-api": "./dist/cursor-api/cursor-api.exe"
   },
   "type": "module",
   "scripts": {

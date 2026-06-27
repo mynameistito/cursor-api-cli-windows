@@ -1,6 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({ component: App });
+
+const repoUrl = "https://github.com/mynameistito/cursor-api-cli-windows";
 
 function App() {
   return (
@@ -18,14 +20,14 @@ function App() {
           localhost.
         </p>
         <div className="flex flex-wrap gap-3">
-          <a
-            href="/about"
+          <Link
+            to="/about"
             className="rounded-full border border-[rgba(50,143,151,0.3)] bg-[rgba(79,184,178,0.14)] px-5 py-2.5 text-sm font-semibold text-[var(--lagoon-deep)] no-underline transition hover:-translate-y-0.5 hover:bg-[rgba(79,184,178,0.24)]"
           >
             About cursor-api
-          </a>
+          </Link>
           <a
-            href="https://github.com/mynameistito/cursor-api-cli-windows"
+            href={repoUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-full border border-[rgba(23,58,64,0.2)] bg-white/50 px-5 py-2.5 text-sm font-semibold text-[var(--sea-ink)] no-underline transition hover:-translate-y-0.5 hover:border-[rgba(23,58,64,0.35)]"
@@ -38,20 +40,20 @@ function App() {
       <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
           [
-            "Type-Safe Routing",
-            "Routes and links stay in sync across every page.",
+            "OpenAI-compatible",
+            "Drop in existing tools that expect the OpenAI chat API.",
           ],
           [
-            "Server Functions",
-            "Call server code from your UI without creating API boilerplate.",
+            "Local daemon",
+            "Run cursor-api in the background with start, stop, and status.",
           ],
           [
-            "Streaming by Default",
-            "Ship progressively rendered responses for faster experiences.",
+            "Windows-first",
+            "Single executable bundle with a bundled Node bridge runtime.",
           ],
           [
-            "Tailwind Native",
-            "Design quickly with utility-first styling and reusable tokens.",
+            "Simple setup",
+            "Install via PowerShell, set your key, and connect to localhost.",
           ],
         ].map(([title, desc], index) => (
           <article
@@ -71,15 +73,18 @@ function App() {
         <p className="island-kicker mb-2">Quick Start</p>
         <ul className="m-0 list-disc space-y-2 pl-5 text-sm text-[var(--sea-ink-soft)]">
           <li>
-            Edit <code>src/routes/index.tsx</code> to customize the home page.
+            Install:{" "}
+            <code>
+              irm
+              https://raw.githubusercontent.com/mynameistito/cursor-api-cli-windows/main/scripts/install.ps1
+              | iex
+            </code>
           </li>
           <li>
-            Update <code>src/components/Header.tsx</code> and{" "}
-            <code>src/components/Footer.tsx</code> for brand links.
+            Set your API key: <code>cursor-api key set</code>
           </li>
           <li>
-            Add routes in <code>src/routes</code> and tweak visual tokens in{" "}
-            <code>src/styles.css</code>.
+            Start the server: <code>cursor-api start</code>
           </li>
         </ul>
       </section>

@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 
 import ThemeToggle from "./ThemeToggle";
 
+const repoUrl = "https://github.com/mynameistito/cursor-api-cli-windows";
+
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--line)] bg-[var(--header-bg)] px-4 backdrop-blur-lg">
@@ -12,7 +14,7 @@ export default function Header() {
             className="inline-flex items-center gap-2 rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-3 py-1.5 text-sm text-[var(--sea-ink)] no-underline shadow-[0_8px_24px_rgba(30,90,72,0.08)] sm:px-4 sm:py-2"
           >
             <span className="h-2 w-2 rounded-full bg-[linear-gradient(90deg,#56c6be,#7ed3bf)]" />
-            TanStack Start
+            cursor-api
           </Link>
         </h2>
 
@@ -32,37 +34,23 @@ export default function Header() {
             About
           </Link>
           <a
-            href="https://tanstack.com/start/latest/docs/framework/react/overview"
+            href={repoUrl}
             className="nav-link"
             target="_blank"
             rel="noreferrer"
           >
-            Docs
+            GitHub
           </a>
         </div>
 
         <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
           <a
-            href="https://x.com/tan_stack"
+            href={repoUrl}
             target="_blank"
             rel="noreferrer"
             className="hidden rounded-xl p-2 text-[var(--sea-ink-soft)] transition hover:bg-[var(--link-bg-hover)] hover:text-[var(--sea-ink)] sm:block"
           >
-            <span className="sr-only">Follow TanStack on X</span>
-            <svg viewBox="0 0 16 16" aria-hidden="true" width="24" height="24">
-              <path
-                fill="currentColor"
-                d="M12.6 1h2.2L10 6.48 15.64 15h-4.41L7.78 9.82 3.23 15H1l5.14-5.84L.72 1h4.52l3.12 4.73L12.6 1zm-.77 12.67h1.22L4.57 2.26H3.26l8.57 11.41z"
-              />
-            </svg>
-          </a>
-          <a
-            href="https://github.com/TanStack"
-            target="_blank"
-            rel="noreferrer"
-            className="hidden rounded-xl p-2 text-[var(--sea-ink-soft)] transition hover:bg-[var(--link-bg-hover)] hover:text-[var(--sea-ink)] sm:block"
-          >
-            <span className="sr-only">Go to TanStack GitHub</span>
+            <span className="sr-only">Go to cursor-api GitHub</span>
             <svg viewBox="0 0 16 16" aria-hidden="true" width="24" height="24">
               <path
                 fill="currentColor"
