@@ -4,5 +4,9 @@ import vitest from "ultracite/oxlint/vitest";
 
 export default defineConfig({
   extends: [core, vitest],
-  ignorePatterns: core.ignorePatterns,
+  ignorePatterns: [
+    ...core.ignorePatterns,
+    "**/routeTree.gen.ts",
+    "apps/web/**",
+  ],
 });

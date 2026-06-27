@@ -24,7 +24,7 @@ const bridgeSrc = path.join(root, "bridge");
 const bridgeDst = path.join(bundleDir, "bridge");
 cpSync(bridgeSrc, bridgeDst, { recursive: true });
 
-const installScript = path.join(root, "scripts", "install.ps1");
+const installScript = path.join(root, "..", "..", "scripts", "install.ps1");
 if (existsSync(installScript)) {
   cpSync(installScript, path.join(bundleDir, "install.ps1"));
 }

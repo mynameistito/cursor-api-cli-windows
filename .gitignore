@@ -1,10 +1,29 @@
 node_modules/
-dist/
-bridge/node_modules/
-bridge/node.exe
+.turbo/
 *.log
 .env
 .netrc
 .DS_Store
 Thumbs.db
 /package-lock.json
+
+# CLI build + bridge runtime
+apps/cli/dist/
+apps/cli/bridge/node_modules/
+apps/cli/bridge/node.exe
+
+# Web build
+apps/web/dist/
+apps/web/.output/
+apps/web/node_modules/
+apps/web/bun.lock
+apps/web/.cta.json
+apps/web/.vscode/
+
+# Legacy paths (pre-monorepo)
+dist/
+bridge/node_modules/
+bridge/node.exe
+
+# Generated during release CI
+.changeset/RELEASE_NOTES.md

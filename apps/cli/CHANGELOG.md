@@ -1,5 +1,7 @@
 # cursor-api-cli-windows
 
+> Release history below covers the CLI package. From 0.1.10 onward the CLI lives in `apps/cli/` inside a Turborepo monorepo.
+
 ## 0.1.9
 
 ### Patch Changes
