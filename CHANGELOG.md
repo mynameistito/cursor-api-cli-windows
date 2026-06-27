@@ -1,5 +1,15 @@
 # cursor-api-cli-windows
 
+## 0.1.8
+
+### Patch Changes
+
+- d194c1f: Use Bun to install the bridge runtime
+- bcafbcc: Change default port from 8787 to 6903
+- 297e2c0: Run CI build on Windows and parallelize checks
+- bdeb192: Patch vulnerable transitive dependencies
+- a3cb140: Support OpenCode opencode.jsonc config files
+
 ## 0.1.7
 
 ### Patch Changes
