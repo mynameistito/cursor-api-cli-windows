@@ -7,3 +7,4 @@ bridge/node.exe
 .netrc
 .DS_Store
 Thumbs.db
+/package-lock.json
