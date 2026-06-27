@@ -2,11 +2,19 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import path from "node:path";
 
+import { applyEdits, modify, parse as parseJsonc } from "jsonc-parser";
+
 import { LOCAL_API_KEY_LITERAL } from "@/config";
 
 const BRAND = "cursor-api";
 
 const LOCAL_API_KEY = LOCAL_API_KEY_LITERAL;
+
+const OPENCODE_JSON = "opencode.json";
+
+const OPENCODE_JSONC = "opencode.jsonc";
+
+const JSONC_FORMATTING = { insertSpaces: true, tabSize: 2 };
 
 interface AgentInfo {
   id: string;
@@ -14,12 +22,34 @@ interface AgentInfo {
   status: "configured" | "not_configured" | "not_installed";
 }
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
 const configHome = function configHome(): string {
   const xdg = process.env.XDG_CONFIG_HOME;
   if (xdg?.trim() && xdg.startsWith("/")) {
     return xdg;
   }
   return path.join(homedir(), ".config");
+};
+
+const opencodeConfigDir = function opencodeConfigDir(): string {
+  return path.join(configHome(), "opencode");
+};
+
+/** Resolve OpenCode config path, preferring opencode.jsonc when present. */
+export const resolveOpencodeConfigPath = function resolveOpencodeConfigPath(
+  dir = opencodeConfigDir()
+): string {
+  const jsonc = path.join(dir, OPENCODE_JSONC);
+  const json = path.join(dir, OPENCODE_JSON);
+  if (existsSync(jsonc)) {
+    return jsonc;
+  }
+  if (existsSync(json)) {
+    return json;
+  }
+  return jsonc;
 };
 
 const epochMs = function epochMs(): number {
@@ -61,12 +91,24 @@ const readJson = function readJson(
   }
   try {
     const parsed = JSON.parse(readFileSync(filePath, "utf-8"));
-    return typeof parsed === "object" && parsed && !Array.isArray(parsed)
-      ? (parsed as Record<string, unknown>)
-      : { ...fallback };
+    return isRecord(parsed) ? parsed : { ...fallback };
   } catch {
     return { ...fallback };
   }
+};
+
+const readOpencodeRoot = function readOpencodeRoot(
+  filePath: string
+): Record<string, unknown> {
+  if (!existsSync(filePath)) {
+    return {};
+  }
+  const text = readFileSync(filePath, "utf-8");
+  if (filePath.endsWith(".jsonc")) {
+    const parsed = parseJsonc(text);
+    return isRecord(parsed) ? parsed : {};
+  }
+  return readJson(filePath);
 };
 
 const costLimitModels = function costLimitModels(): Record<string, unknown> {
@@ -84,49 +126,120 @@ const costLimitModels = function costLimitModels(): Record<string, unknown> {
   };
 };
 
-const opencodePath = function opencodePath(): string {
-  return path.join(configHome(), "opencode", "opencode.json");
-};
-
-const configureOpencode = function configureOpencode(baseUrl: string): string {
-  const filePath = opencodePath();
-  const root = readJson(filePath);
-  const provider =
-    typeof root.provider === "object" &&
-    root.provider &&
-    !Array.isArray(root.provider)
-      ? { ...(root.provider as Record<string, unknown>) }
-      : {};
-  delete provider.cursor;
-  delete provider.cursorsdk;
-  provider.cursorapi = {
+const cursorapiProvider = function cursorapiProvider(
+  baseUrl: string
+): Record<string, unknown> {
+  return {
     models: costLimitModels(),
     name: BRAND,
     npm: "@ai-sdk/openai-compatible",
     options: { apiKey: LOCAL_API_KEY, baseURL: baseUrl },
   };
+};
+
+const shouldSetDefaultModel = function shouldSetDefaultModel(
+  model: unknown
+): boolean {
+  return (
+    typeof model !== "string" ||
+    !model ||
+    model.startsWith("cursor/") ||
+    model.startsWith("cursorsdk/")
+  );
+};
+
+const applyJsoncEdits = function applyJsoncEdits(
+  text: string,
+  edits: ReturnType<typeof modify>
+): string {
+  const next = applyEdits(text, edits);
+  return next.endsWith("\n") ? next : `${next}\n`;
+};
+
+/** Configure cursor-api provider in an OpenCode config file (json or jsonc). */
+export const configureOpencodeFile = function configureOpencodeFile(
+  filePath: string,
+  baseUrl: string
+): void {
+  mkdirSync(path.dirname(filePath), { recursive: true });
+  const cursorapi = cursorapiProvider(baseUrl);
+
+  if (filePath.endsWith(".jsonc")) {
+    let text = existsSync(filePath)
+      ? readFileSync(filePath, "utf-8")
+      : "{\n}\n";
+    for (const key of ["cursor", "cursorsdk"]) {
+      const root = parseJsonc(text);
+      const provider =
+        isRecord(root) && isRecord(root.provider) ? root.provider : {};
+      if (key in provider) {
+        text = applyJsoncEdits(
+          text,
+          modify(text, ["provider", key], undefined, {
+            formattingOptions: JSONC_FORMATTING,
+          })
+        );
+      }
+    }
+    text = applyJsoncEdits(
+      text,
+      modify(text, ["provider", "cursorapi"], cursorapi, {
+        formattingOptions: JSONC_FORMATTING,
+      })
+    );
+    const root = parseJsonc(text);
+    if (isRecord(root) && shouldSetDefaultModel(root.model)) {
+      text = applyJsoncEdits(
+        text,
+        modify(text, ["model"], "cursorapi/composer-2.5-fast", {
+          formattingOptions: JSONC_FORMATTING,
+        })
+      );
+    }
+    backupIfChanged(filePath, text);
+    writeFileSync(filePath, text, "utf-8");
+    return;
+  }
+
+  const root = readJson(filePath);
+  const provider = isRecord(root.provider) ? { ...root.provider } : {};
+  delete provider.cursor;
+  delete provider.cursorsdk;
+  provider.cursorapi = cursorapi;
   root.provider = provider;
-  const model = typeof root.model === "string" ? root.model : "";
-  if (!model || model.startsWith("cursor/") || model.startsWith("cursorsdk/")) {
+  if (shouldSetDefaultModel(root.model)) {
     root.model = "cursorapi/composer-2.5-fast";
   }
   writePrettyJson(filePath, root);
+};
+
+const configureOpencode = function configureOpencode(baseUrl: string): string {
+  const filePath = resolveOpencodeConfigPath();
+  configureOpencodeFile(filePath, baseUrl);
   return filePath;
 };
 
+const opencodeConfigExists = function opencodeConfigExists(
+  dir: string
+): boolean {
+  return (
+    existsSync(path.join(dir, OPENCODE_JSONC)) ||
+    existsSync(path.join(dir, OPENCODE_JSON))
+  );
+};
+
 const opencodeStatus = function opencodeStatus(): AgentInfo["status"] {
-  const filePath = opencodePath();
-  const root = readJson(filePath);
+  const dir = opencodeConfigDir();
+  if (!opencodeConfigExists(dir)) {
+    return "not_configured";
+  }
+  const filePath = resolveOpencodeConfigPath(dir);
+  const root = readOpencodeRoot(filePath);
   const { provider } = root;
-  if (
-    typeof provider === "object" &&
-    provider &&
-    !Array.isArray(provider) &&
-    "cursorapi" in (provider as Record<string, unknown>)
-  ) {
+  if (isRecord(provider) && "cursorapi" in provider) {
     return "configured";
   }
-  return existsSync(filePath) ? "not_configured" : "not_configured";
+  return "not_configured";
 };
 
 const AGENTS: {

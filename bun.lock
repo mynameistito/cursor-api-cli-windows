@@ -6,6 +6,7 @@
       "name": "cursor-api-cli-windows",
       "dependencies": {
         "commander": "^15.0.0",
+        "jsonc-parser": "^3.3.1",
       },
       "devDependencies": {
         "@changesets/cli": "^2.31.0",
