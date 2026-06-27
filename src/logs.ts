@@ -41,6 +41,12 @@ export const createLogStream = (channel: LogChannel) => {
   return createWriteStream("", { fd, flags: "a" });
 };
 
+/** Open a log file descriptor for child stdio (caller should close after spawn). */
+export const openLogFd = (channel: LogChannel): number => {
+  ensureConfigDirs();
+  return openSync(logFile(channel), "a");
+};
+
 export const readRecentLogs = (
   channel: LogChannel | "all",
   lines = 80
