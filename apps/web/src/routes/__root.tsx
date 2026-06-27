@@ -26,7 +26,12 @@ export const Route = createRootRoute({
         name: "viewport",
       },
       {
-        title: "cursor-api for Windows",
+        title: "cursor-api for Windows | Local OpenAI-Compatible Cursor API",
+      },
+      {
+        name: "description",
+        content:
+          "Run a Windows CLI daemon that exposes Cursor Composer through a local OpenAI-compatible API.",
       },
     ],
   }),
@@ -34,6 +39,8 @@ export const Route = createRootRoute({
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const showDevtools = import.meta.env.DEV;
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -44,17 +51,19 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Header />
         {children}
         <Footer />
-        <TanStackDevtools
-          config={{
-            position: "bottom-right",
-          }}
-          plugins={[
-            {
-              name: "Tanstack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
+        {showDevtools ? (
+          <TanStackDevtools
+            config={{
+              position: "bottom-right",
+            }}
+            plugins={[
+              {
+                name: "Tanstack Router",
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+            ]}
+          />
+        ) : null}
         <Scripts />
       </body>
     </html>

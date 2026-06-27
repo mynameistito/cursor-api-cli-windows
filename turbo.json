@@ -18,6 +18,13 @@
       "dependsOn": ["^build", "generate-routes"]
     },
     "check": {},
+    "cf-typegen": {
+      "outputs": ["worker-configuration.d.ts"]
+    },
+    "deploy": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
     "knip": {},
     "fix": {
       "cache": false
