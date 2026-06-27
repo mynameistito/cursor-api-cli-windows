@@ -23,6 +23,7 @@ packages/       — shared libraries (future)
 - `src/bridge.ts` — spawns bundled Node SDK bridge
 - `src/api/` — shared API translation layer
 - `scripts/changeset-add.ts` — non-interactive Changesets helper for agents
+- `../../scripts/install.ps1` — canonical Windows installer (bundled into releases; used by `irm … | iex`)
 
 ### Web (`apps/web`)
 

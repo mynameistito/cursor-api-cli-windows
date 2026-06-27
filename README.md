@@ -39,7 +39,7 @@ Or download and run:
 
 ```powershell
 cd cursor-api-cli-windows
-.\apps\cli\scripts\install.ps1
+.\scripts\install.ps1
 ```
 
 ---

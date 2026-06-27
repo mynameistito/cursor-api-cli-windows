@@ -327,7 +327,7 @@ const ciRelease = async (): Promise<void> => {
     return;
   }
 
-  runInherited("bun", ["run", "typecheck"], monorepoRoot);
+  runInherited("bun", ["run", "typecheck"], packageRoot);
   runInherited("bun", ["run", "build:cli"], monorepoRoot);
 
   const zipPath = await zipRelease(tag);
