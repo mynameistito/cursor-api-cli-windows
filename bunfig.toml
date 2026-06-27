@@ -1,3 +1,0 @@
-[alias]
-"@" = "./src"
-"@package" = "./package.json"

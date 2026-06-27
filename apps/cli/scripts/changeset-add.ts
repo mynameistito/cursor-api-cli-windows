@@ -3,11 +3,16 @@
  * Non-interactive changeset creator for AI agents
  *
  * Usage:
- *   bun run ./scripts/changeset-add.ts <type> <summary>
+ *   bun run changeset-add.ts <type> <summary>
+ *   bun run changeset-add.ts <package> <type> <summary>
+ *   bun run changeset-add.ts both <type> <summary>
  *
- * Example:
- *   bun run ./scripts/changeset-add.ts patch "Fix clipboard timing"
- *   bun run ./scripts/changeset-add.ts minor "Add new feature"
+ * Packages: cli (default), web, both
+ *
+ * Examples:
+ *   bun run changeset-add.ts patch "Fix daemon exit code"
+ *   bun run changeset-add.ts web minor "Add install guide page"
+ *   bun run changeset-add.ts both patch "Update shared CI tooling"
  */
 
 import { randomBytes } from "node:crypto";
@@ -17,64 +22,54 @@ import path from "node:path";
 
 /** Minimal package manifest fields needed by the non-interactive changeset tool. */
 interface PackageJson {
-  /** Runtime dependencies declared by the package. */
   dependencies?: Record<string, unknown>;
-  /** Development dependencies declared by the package. */
   devDependencies?: Record<string, unknown>;
-  /** Package name written into Changesets frontmatter. */
   name?: unknown;
-  /** Optional dependencies declared by the package. */
   optionalDependencies?: Record<string, unknown>;
-  /** Peer dependencies declared by the package. */
   peerDependencies?: Record<string, unknown>;
 }
 
-/** Semver bump types supported by Changesets. */
 type ChangesetType = "patch" | "minor" | "major";
+type PackageTarget = "cli" | "web";
+type PackageTargetArg = PackageTarget | "both";
 
-/** Runtime list used to validate command-line Changeset bump arguments. */
 const changesetTypes = ["patch", "minor", "major"] as const;
+const packageTargets = ["cli", "web", "both"] as const;
 
-/**
- * Narrows an arbitrary CLI argument to a supported Changeset bump type.
- *
- * @param type - Raw type argument from the command line.
- * @returns `true` when the value is `patch`, `minor`, or `major`.
- */
+const packageManifestPaths: Record<PackageTarget, string> = {
+  cli: "apps/cli/package.json",
+  web: "apps/web/package.json",
+};
+
 const isChangesetType = (type: string | undefined): type is ChangesetType =>
   changesetTypes.includes(type as ChangesetType);
 
-/**
- * Finds the nearest project root by walking upward until a package manifest is found.
- *
- * @param startDir - Directory where the search should begin.
- * @returns The directory containing `package.json`.
- */
-const findProjectRoot = (startDir: string) => {
+const isPackageTarget = (
+  value: string | undefined
+): value is PackageTargetArg =>
+  packageTargets.includes(value as PackageTargetArg);
+
+const findMonorepoRoot = (startDir: string) => {
   let currentDir = startDir;
 
   while (currentDir !== path.dirname(currentDir)) {
-    if (existsSync(path.join(currentDir, "package.json"))) {
+    if (existsSync(path.join(currentDir, ".changeset"))) {
       return currentDir;
     }
 
     currentDir = path.dirname(currentDir);
   }
 
-  if (existsSync(path.join(currentDir, "package.json"))) {
+  if (existsSync(path.join(currentDir, ".changeset"))) {
     return currentDir;
   }
 
-  console.error("Could not find package.json from script location");
+  console.error(
+    "Could not find monorepo root (.changeset) from script location"
+  );
   process.exit(1);
 };
 
-/**
- * Reads and parses the project's package manifest.
- *
- * @param packageJsonPath - Absolute path to `package.json`.
- * @returns Parsed package metadata needed to create the changeset.
- */
 const readPackageJson = (packageJsonPath: string) => {
   try {
     return JSON.parse(readFileSync(packageJsonPath, "utf-8")) as PackageJson;
@@ -85,12 +80,6 @@ const readPackageJson = (packageJsonPath: string) => {
   }
 };
 
-/**
- * Reads the package name required by Changesets frontmatter.
- *
- * @param packageJson - Parsed package metadata.
- * @returns The non-empty package name.
- */
 const getPackageName = (packageJson: PackageJson) => {
   if (typeof packageJson.name !== "string" || !packageJson.name.trim()) {
     console.error("package.json must include a non-empty name field");
@@ -100,12 +89,6 @@ const getPackageName = (packageJson: PackageJson) => {
   return packageJson.name;
 };
 
-/**
- * Checks whether the package declares the Changesets CLI in any dependency block.
- *
- * @param packageJson - Parsed package metadata.
- * @returns `true` when `@changesets/cli` is declared.
- */
 const hasChangesetsCliDependency = (packageJson: PackageJson) =>
   Boolean(
     packageJson.dependencies?.["@changesets/cli"] ||
@@ -114,12 +97,6 @@ const hasChangesetsCliDependency = (packageJson: PackageJson) =>
     packageJson.peerDependencies?.["@changesets/cli"]
   );
 
-/**
- * Verifies that the Changesets CLI is both declared and installed.
- *
- * @param packageJson - Parsed package metadata.
- * @param projectRoot - Root directory used to resolve installed dependencies.
- */
 const assertChangesetsCliInstalled = (
   packageJson: PackageJson,
   projectRoot: string
@@ -143,12 +120,6 @@ const assertChangesetsCliInstalled = (
   }
 };
 
-/**
- * Parses and validates the CLI bump-type argument.
- *
- * @param type - Raw type argument from `process.argv`.
- * @returns A supported Changeset bump type.
- */
 const parseChangesetType = (type: string | undefined): ChangesetType => {
   if (isChangesetType(type)) {
     return type;
@@ -158,12 +129,6 @@ const parseChangesetType = (type: string | undefined): ChangesetType => {
   process.exit(1);
 };
 
-/**
- * Creates a unique markdown filename for a new changeset.
- *
- * @param changesetDir - Directory where changeset files are written.
- * @returns Absolute path for a not-yet-existing changeset file.
- */
 const createChangesetFilename = (changesetDir: string) => {
   for (let attempt = 0; attempt < 10; attempt += 1) {
     const id = randomBytes(4).toString("hex");
@@ -178,35 +143,69 @@ const createChangesetFilename = (changesetDir: string) => {
   process.exit(1);
 };
 
+const resolveTargets = (
+  args: string[]
+): { targets: PackageTarget[]; type: ChangesetType; summary: string } => {
+  if (args.length < 2) {
+    console.error("Usage: changeset-add.ts [cli|web|both] <type> <summary>");
+    console.error("  package: cli (default) | web | both");
+    console.error("  type: patch | minor | major");
+    process.exit(1);
+  }
+
+  if (isPackageTarget(args[0])) {
+    const [target, type, ...summaryParts] = args;
+    const summary = summaryParts.join(" ");
+
+    if (!summary.trim()) {
+      console.error("Summary cannot be empty");
+      process.exit(1);
+    }
+
+    return {
+      summary,
+      targets: target === "both" ? ["cli", "web"] : [target],
+      type: parseChangesetType(type),
+    };
+  }
+
+  const [type, ...summaryParts] = args;
+  const summary = summaryParts.join(" ");
+
+  if (!summary.trim()) {
+    console.error("Summary cannot be empty");
+    process.exit(1);
+  }
+
+  return {
+    summary,
+    targets: ["cli"],
+    type: parseChangesetType(type),
+  };
+};
+
 const args = process.argv.slice(2);
+const { targets, type: changesetType, summary } = resolveTargets(args);
+const monorepoRoot = findMonorepoRoot(import.meta.dirname);
+const rootPackageJson = readPackageJson(
+  path.join(monorepoRoot, "package.json")
+);
+assertChangesetsCliInstalled(rootPackageJson, monorepoRoot);
 
-if (args.length < 2) {
-  console.error("Usage: changeset-add.ts <type> <summary>");
-  console.error("  type: patch | minor | major");
-  console.error("  summary: Description of the change");
-  process.exit(1);
-}
+const frontmatter = targets
+  .map((target) => {
+    const manifestPath = path.join(monorepoRoot, packageManifestPaths[target]);
+    const packageName = getPackageName(readPackageJson(manifestPath));
+    return `"${packageName}": ${changesetType}`;
+  })
+  .join("\n");
 
-const [type, ...summaryParts] = args;
-const changesetType = parseChangesetType(type);
-const summary = summaryParts.join(" ");
-
-if (!summary.trim()) {
-  console.error("Summary cannot be empty");
-  process.exit(1);
-}
-
-const projectRoot = findProjectRoot(import.meta.dirname);
-const packageJson = readPackageJson(path.join(projectRoot, "package.json"));
-const packageName = getPackageName(packageJson);
-assertChangesetsCliInstalled(packageJson, projectRoot);
-
-const changesetDir = path.join(projectRoot, ".changeset");
+const changesetDir = path.join(monorepoRoot, ".changeset");
 const filename = createChangesetFilename(changesetDir);
-const relativeFilename = path.relative(projectRoot, filename);
+const relativeFilename = path.relative(monorepoRoot, filename);
 
 const content = `---
-"${packageName}": ${changesetType}
+${frontmatter}
 ---
 
 ${summary.trim()}
@@ -215,6 +214,11 @@ ${summary.trim()}
 mkdirSync(changesetDir, { recursive: true });
 writeFileSync(filename, content);
 console.log(`✓ Created changeset: ${relativeFilename}`);
-console.log(`  Package: ${packageName}`);
+for (const target of targets) {
+  const packageName = getPackageName(
+    readPackageJson(path.join(monorepoRoot, packageManifestPaths[target]))
+  );
+  console.log(`  Package: ${packageName}`);
+}
 console.log(`  Type: ${changesetType}`);
 console.log(`  Summary: ${summary}`);

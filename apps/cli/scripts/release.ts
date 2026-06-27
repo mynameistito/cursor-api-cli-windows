@@ -34,9 +34,10 @@ interface GitHubRelease {
   upload_url: string;
 }
 
-const projectRoot = path.join(import.meta.dirname, "..");
-const bundleDir = path.join(projectRoot, "dist", "cursor-api");
-const distDir = path.join(projectRoot, "dist");
+const packageRoot = path.join(import.meta.dirname, "..");
+const monorepoRoot = path.join(packageRoot, "..", "..");
+const bundleDir = path.join(packageRoot, "dist", "cursor-api");
+const distDir = path.join(packageRoot, "dist");
 
 const resolveReleaseTag = (published?: boolean): string => {
   const githubRef = process.env.GITHUB_REF ?? "";
@@ -257,13 +258,17 @@ const uploadRelease = async (options: {
 
 const runCommand = (command: string, args: string[]): string =>
   execFileSync(command, args, {
-    cwd: projectRoot,
+    cwd: packageRoot,
     encoding: "utf-8",
     stdio: ["ignore", "pipe", "pipe"],
   }).trim();
 
-const runInherited = (command: string, args: string[]): void => {
-  execFileSync(command, args, { cwd: projectRoot, stdio: "inherit" });
+const runInherited = (
+  command: string,
+  args: string[],
+  cwd: string = packageRoot
+): void => {
+  execFileSync(command, args, { cwd, stdio: "inherit" });
 };
 
 const expectedReleaseAsset = (version: string): string =>
@@ -296,7 +301,7 @@ const escapeRegex = (value: string): string =>
   value.replaceAll(/[.*+?^${}()|[\]\\]/gu, "\\$&");
 
 const readReleaseNotes = (version: string): string => {
-  const changelogPath = path.join(projectRoot, "CHANGELOG.md");
+  const changelogPath = path.join(packageRoot, "CHANGELOG.md");
 
   if (!existsSync(changelogPath)) {
     return `Release v${version}`;
@@ -322,8 +327,8 @@ const ciRelease = async (): Promise<void> => {
     return;
   }
 
-  runInherited("bun", ["run", "typecheck"]);
-  runInherited("bun", ["run", "build"]);
+  runInherited("bun", ["run", "typecheck"], monorepoRoot);
+  runInherited("bun", ["run", "build:cli"], monorepoRoot);
 
   const zipPath = await zipRelease(tag);
 
@@ -331,7 +336,7 @@ const ciRelease = async (): Promise<void> => {
     throw new Error(`Missing build artifact: ${zipPath}`);
   }
 
-  const notesPath = path.join(projectRoot, ".changeset", "RELEASE_NOTES.md");
+  const notesPath = path.join(monorepoRoot, ".changeset", "RELEASE_NOTES.md");
   writeFileSync(notesPath, readReleaseNotes(version));
 
   const target = runCommand("git", ["rev-parse", "HEAD"]);

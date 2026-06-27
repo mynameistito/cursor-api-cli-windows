@@ -38,9 +38,8 @@ Or download and run:
 ```
 
 ```powershell
-git clone https://github.com/mynameistito/cursor-api-cli-windows.git
 cd cursor-api-cli-windows
-.\scripts\install.ps1
+.\apps\cli\scripts\install.ps1
 ```
 
 ---
@@ -94,29 +93,39 @@ settings in `%APPDATA%\cursor-api\`.
 
 ## Development
 
+Monorepo: **Turborepo** + Bun workspaces.
+
+| App  | Path        | README                                   |
+| ---- | ----------- | ---------------------------------------- |
+| CLI  | `apps/cli/` | [apps/cli/README.md](apps/cli/README.md) |
+| Site | `apps/web/` | [apps/web/README.md](apps/web/README.md) |
+
 ```powershell
 git clone https://github.com/mynameistito/cursor-api-cli-windows.git
 cd cursor-api-cli-windows
 bun install
 bun run stage:bridge
 
-bun run dev key set
-bun run dev start
+bun run dev:cli key set
+bun run dev:cli start
 bun run typecheck
-bun run build
+bun run build:cli
+bun run dev:web    # TanStack site on http://localhost:3000
 ```
 
 ### Releases and changelog
 
 Releases are managed with [Changesets](https://github.com/changesets/changesets):
 
-1. Add a changeset when your PR includes user-facing changes: `bun run changeset` (or `bun run changeset-add patch "summary"` for agents)
+1. Add a changeset when your PR includes user-facing CLI changes: `bun run changeset` (or `bun run changeset-add patch "summary"` for agents)
 2. Merge to `main` — the **Release** workflow opens a `chore: version packages` PR when changesets are pending
-3. Merge that version PR — `package.json` and `CHANGELOG.md` are updated on `main`, then the Windows zip is built and uploaded to [GitHub Releases](https://github.com/mynameistito/cursor-api-cli-windows/releases)
+3. Merge that version PR — `apps/cli/package.json` and `apps/cli/CHANGELOG.md` are updated on `main`, then the Windows zip is built and uploaded to [GitHub Releases](https://github.com/mynameistito/cursor-api-cli-windows/releases)
 
-This project is not published to npm (`private: true`). Releases are GitHub-only.
+Only `cursor-api-cli-windows` is released to GitHub. `@cursor-api/web` is versioned in the monorepo but not published.
 
-`.github/workflows/release.yml` runs changesets on Ubuntu and builds the Windows bundle on `windows-latest`. CI runs typecheck, lint, and knip on pull requests and pushes to `main`.
+This project is not published to npm (`private: true`). CLI releases are GitHub-only.
+
+`.github/workflows/release.yml` runs changesets on Ubuntu and builds the Windows bundle on `windows-latest`. CI runs typecheck, test, lint, knip, and builds for both apps on pull requests and pushes to `main`.
 
 ---
 
