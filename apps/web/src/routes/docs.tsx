@@ -6,10 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export const Route = createFileRoute("/docs")({
-  component: Docs,
-});
-
 const installCommand =
   "irm https://cursor-api-windows.mynameistito.com/install.ps1 | iex";
 
@@ -22,13 +18,6 @@ const setupSteps = [
 ] as const;
 
 const commandGroups = {
-  Server: [
-    "cursor-api start",
-    "cursor-api stop",
-    "cursor-api restart",
-    "cursor-api status",
-    "cursor-api logs -f",
-  ],
   Config: [
     "cursor-api key set",
     "cursor-api key status",
@@ -41,6 +30,13 @@ const commandGroups = {
     "cursor-api url",
     "cursor-api update check",
     "cursor-api update install",
+  ],
+  Server: [
+    "cursor-api start",
+    "cursor-api stop",
+    "cursor-api restart",
+    "cursor-api status",
+    "cursor-api logs -f",
   ],
 } as const;
 
@@ -129,334 +125,7 @@ const docsNav = [
   ["Credits", "#credits"],
 ] as const;
 
-function Docs() {
-  return (
-    <main className="mx-auto grid w-full max-w-[1240px] gap-10 px-4 py-10 lg:grid-cols-[14rem_1fr] lg:py-12">
-      <aside className="hidden lg:block">
-        <nav className="sticky top-24 space-y-1 text-sm">
-          <p className="mb-3 font-mono text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-            Docs
-          </p>
-          {docsNav.map(([label, href]) => (
-            <a
-              className="block rounded-md px-2 py-1.5 text-muted-foreground no-underline hover:bg-muted hover:text-foreground"
-              href={href}
-              key={href}
-            >
-              {label}
-            </a>
-          ))}
-        </nav>
-      </aside>
-
-      <article className="min-w-0 max-w-4xl">
-        <section className="border-b border-border pb-8" id="overview">
-          <Badge
-            variant="outline"
-            className="mb-4 rounded-md bg-background/80 px-2.5 py-1 font-mono text-xs"
-          >
-            Documentation
-          </Badge>
-          <h1 className="mb-4 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">
-            cursor-api docs
-          </h1>
-          <p className="max-w-3xl text-lg leading-8 text-muted-foreground">
-            Run a local Windows daemon that exposes Cursor Composer through
-            OpenAI-compatible and Anthropic-compatible API shapes for agent
-            clients.
-          </p>
-        </section>
-
-        <section className="border-b border-border py-8">
-          <SectionHeading
-            description="Use these values in agent clients that support a custom local API endpoint."
-            title="Client settings"
-          />
-          <div className="grid gap-2 sm:grid-cols-2">
-            {clientRows.map(([label, value]) => (
-              <Detail key={label} label={label} value={value} />
-            ))}
-          </div>
-        </section>
-
-        <section className="border-b border-border py-8" id="quick-start">
-          <SectionHeading
-            description="Install the release bundle, store your Cursor key, then start the local daemon."
-            title="Quick start"
-          />
-          <div className="space-y-3">
-            {setupSteps.map(([label, command], index) => (
-              <Step
-                command={command}
-                key={label}
-                label={`${index + 1}. ${label}`}
-              />
-            ))}
-          </div>
-        </section>
-
-        <section className="border-b border-border py-8" id="agent-clients">
-          <SectionHeading
-            description="Any client that can set an OpenAI-compatible base URL can point at the daemon."
-            title="Agent clients"
-          />
-          <div className="space-y-4 text-sm leading-7 text-muted-foreground">
-            <p>
-              Use <code>cursor-local</code> as the local API key and choose
-              either Composer model name.
-            </p>
-            <CodeBlock
-              value={`OPENAI_BASE_URL=http://127.0.0.1:6903/v1
-OPENAI_API_KEY=cursor-local
-OPENAI_MODEL=composer-2.5-fast`}
-            />
-            <p>
-              The CLI also includes an agent configuration command for supported
-              clients, starting with OpenCode.
-            </p>
-            <CodeBlock value="cursor-api configure agent opencode" />
-          </div>
-        </section>
-
-        <section className="border-b border-border py-8" id="requests">
-          <SectionHeading
-            description="The server accepts common agent request shapes and translates them through the same Composer path."
-            title="Request examples"
-          />
-          <div className="grid gap-5 lg:grid-cols-2">
-            <div className="space-y-4 text-sm leading-7 text-muted-foreground">
-              <h3 className="text-base font-semibold text-foreground">
-                OpenAI-compatible
-              </h3>
-              <p>
-                Use the same shape most OpenAI-compatible agents already emit.
-                Set <code>stream</code> when your client expects server-sent
-                events.
-              </p>
-              <CodeBlock
-                value={`POST http://127.0.0.1:6903/v1/chat/completions
-Authorization: Bearer cursor-local
-Content-Type: application/json
-
-{
-  "model": "composer-2.5-fast",
-  "messages": [
-    { "role": "user", "content": "Inspect this repo and suggest a fix." }
-  ],
-  "stream": true
-}`}
-              />
-            </div>
-
-            <div className="space-y-4 text-sm leading-7 text-muted-foreground">
-              <h3 className="text-base font-semibold text-foreground">
-                Anthropic-compatible
-              </h3>
-              <p>
-                The local server also accepts the Anthropic Messages shape for
-                Claude Code-style clients and translates it through the same
-                Composer path.
-              </p>
-              <CodeBlock
-                value={`POST http://127.0.0.1:6903/v1/messages
-x-api-key: cursor-local
-anthropic-version: 2023-06-01
-Content-Type: application/json
-
-{
-  "model": "composer-2.5",
-  "max_tokens": 1200,
-  "messages": [
-    { "role": "user", "content": "Plan the next edit." }
-  ]
-}`}
-              />
-            </div>
-          </div>
-        </section>
-
-        <section className="border-b border-border py-8" id="api-surface">
-          <SectionHeading
-            description="The daemon binds to loopback and exposes only the local /v1 surface."
-            title="API surface"
-          />
-          <div className="space-y-3">
-            {endpointRows.map(([method, path, description]) => (
-              <div
-                className="grid gap-2 border-b border-border py-3 last:border-b-0 sm:grid-cols-[5rem_13rem_1fr]"
-                key={path}
-              >
-                <span className="font-mono text-xs font-semibold text-[var(--lagoon)]">
-                  {method}
-                </span>
-                <code className="break-all font-mono text-xs">{path}</code>
-                <span className="text-sm leading-6 text-muted-foreground">
-                  {description}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 max-w-2xl space-y-4 text-sm leading-7 text-muted-foreground">
-            <h3 className="text-base font-semibold text-foreground">
-              Model choice
-            </h3>
-            <p>
-              Use <code>composer-2.5</code> when an agent needs a more thorough
-              planning or editing pass.
-            </p>
-            <Separator />
-            <p>
-              Use <code>composer-2.5-fast</code> when you want quicker
-              turn-taking for iterative agent work.
-            </p>
-          </div>
-        </section>
-
-        <section className="border-b border-border py-8" id="runtime">
-          <SectionHeading
-            description="The release bundle keeps the Bun-compiled CLI and Node bridge separate."
-            title="Runtime lifecycle"
-          />
-          <div className="space-y-2">
-            {lifecycleRows.map(([label, value]) => (
-              <Detail key={label} label={label} value={value} />
-            ))}
-          </div>
-        </section>
-
-        <section className="border-b border-border py-8">
-          <SectionHeading
-            description="Use these checks before changing client configuration or reinstalling."
-            title="Troubleshooting"
-          />
-          <div className="space-y-2">
-            {troubleshootingRows.map(([label, value]) => (
-              <Detail key={label} label={label} value={value} />
-            ))}
-          </div>
-        </section>
-
-        <section className="border-b border-border py-8" id="commands">
-          <SectionHeading
-            description="The CLI command surface is grouped by daemon control, configuration, and operations."
-            title="Command reference"
-          />
-          <Tabs defaultValue="Server">
-            <TabsList className="mb-5 grid w-full grid-cols-3">
-              {Object.keys(commandGroups).map((group) => (
-                <TabsTrigger key={group} value={group}>
-                  {group}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            {Object.entries(commandGroups).map(([group, commands]) => (
-              <TabsContent key={group} value={group}>
-                <div className="grid gap-2">
-                  {commands.map((command) => (
-                    <code
-                      className="block rounded-lg border border-border bg-muted px-3 py-2 font-mono text-sm"
-                      key={command}
-                    >
-                      {command}
-                    </code>
-                  ))}
-                </div>
-              </TabsContent>
-            ))}
-          </Tabs>
-        </section>
-
-        <section className="border-b border-border py-8" id="storage">
-          <SectionHeading
-            description="User configuration lives under AppData and is preserved across release updates."
-            title="Where data lives"
-          />
-          <div className="space-y-2">
-            {storageRows.map(([label, value]) => (
-              <Detail key={label} label={label} value={value} />
-            ))}
-          </div>
-        </section>
-
-        <section className="py-8" id="credits">
-          <SectionHeading
-            description="cursor-api-cli-windows is independent and builds on prior MIT work."
-            title="Credits and scope"
-          />
-          <div className="grid gap-3 lg:grid-cols-2">
-            {creditRows.map(([name, description]) => (
-              <div
-                className="rounded-xl border border-border bg-muted/45 p-4"
-                key={name}
-              >
-                <h3 className="mb-2 text-sm font-semibold">{name}</h3>
-                <p className="m-0 text-sm leading-6 text-muted-foreground">
-                  {description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-      </article>
-    </main>
-  );
-}
-
-function Step({ label, command }: { label: string; command: string }) {
-  return (
-    <div className="group relative rounded-lg border border-border bg-muted/35 p-3 pr-20">
-      <CopyButton value={command} />
-      <div className="mb-2 text-sm font-medium text-foreground">{label}</div>
-      <code className="block break-all font-mono text-xs leading-6 text-muted-foreground">
-        {command}
-      </code>
-    </div>
-  );
-}
-
-function Detail({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="grid gap-1 border-b border-border py-3 last:border-b-0 sm:grid-cols-[12rem_1fr] sm:gap-4">
-      <div className="text-sm font-medium text-foreground">{label}</div>
-      <code className="break-all font-mono text-xs leading-6 text-muted-foreground">
-        {value}
-      </code>
-    </div>
-  );
-}
-
-function SectionHeading({
-  description,
-  title,
-}: {
-  description: string;
-  title: string;
-}) {
-  return (
-    <div className="mb-5">
-      <h2 className="mb-2 text-2xl font-semibold tracking-[-0.03em] text-foreground">
-        {title}
-      </h2>
-      <p className="m-0 max-w-2xl text-sm leading-7 text-muted-foreground">
-        {description}
-      </p>
-    </div>
-  );
-}
-
-function CodeBlock({ value }: { value: string }) {
-  return (
-    <div className="group relative">
-      <CopyButton value={value} />
-      <pre className="overflow-x-auto rounded-lg border border-border bg-muted/55 p-4 pr-20 font-mono text-xs leading-6 text-foreground">
-        <code>{value}</code>
-      </pre>
-    </div>
-  );
-}
-
-function CopyButton({ value }: { value: string }) {
+const CopyButton = ({ value }: { value: string }) => {
   const [copied, setCopied] = useState(false);
 
   const copyValue = async () => {
@@ -479,4 +148,321 @@ function CopyButton({ value }: { value: string }) {
       {copied ? "Copied" : "Copy"}
     </button>
   );
-}
+};
+
+const CodeBlock = ({ value }: { value: string }) => (
+  <div className="group relative">
+    <CopyButton value={value} />
+    <pre className="overflow-x-auto rounded-lg border border-border bg-muted/55 p-4 pr-20 font-mono text-xs leading-6 text-foreground">
+      <code>{value}</code>
+    </pre>
+  </div>
+);
+
+const Step = ({ label, command }: { label: string; command: string }) => (
+  <div className="rounded-lg border border-border bg-muted/35 p-3">
+    <div className="mb-2 text-sm font-medium text-foreground">{label}</div>
+    <CodeBlock value={command} />
+  </div>
+);
+
+const Detail = ({ label, value }: { label: string; value: string }) => (
+  <div className="grid gap-1 border-b border-border py-3 last:border-b-0 sm:grid-cols-[12rem_1fr] sm:gap-4">
+    <div className="text-sm font-medium text-foreground">{label}</div>
+    <code className="break-all font-mono text-xs leading-6 text-muted-foreground">
+      {value}
+    </code>
+  </div>
+);
+
+const SectionHeading = ({
+  description,
+  title,
+}: {
+  description: string;
+  title: string;
+}) => (
+  <div className="mb-5">
+    <h2 className="mb-2 text-2xl font-semibold tracking-[-0.03em] text-foreground">
+      {title}
+    </h2>
+    <p className="m-0 max-w-2xl text-sm leading-7 text-muted-foreground">
+      {description}
+    </p>
+  </div>
+);
+
+const Docs = () => (
+  <main className="mx-auto grid w-full max-w-[1240px] gap-10 px-4 py-10 lg:grid-cols-[14rem_1fr] lg:py-12">
+    <aside className="hidden lg:block">
+      <nav className="sticky top-24 space-y-1 text-sm">
+        <p className="mb-3 font-mono text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+          Docs
+        </p>
+        {docsNav.map(([label, href]) => (
+          <a
+            className="block rounded-md px-2 py-1.5 text-muted-foreground no-underline hover:bg-muted hover:text-foreground"
+            href={href}
+            key={href}
+          >
+            {label}
+          </a>
+        ))}
+      </nav>
+    </aside>
+
+    <article className="min-w-0 max-w-4xl">
+      <section className="border-b border-border pb-8" id="overview">
+        <Badge
+          variant="outline"
+          className="mb-4 rounded-md bg-background/80 px-2.5 py-1 font-mono text-xs"
+        >
+          Documentation
+        </Badge>
+        <h1 className="mb-4 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">
+          cursor-api docs
+        </h1>
+        <p className="max-w-3xl text-lg leading-8 text-muted-foreground">
+          Run a local Windows daemon that exposes Cursor Composer through
+          OpenAI-compatible and Anthropic-compatible API shapes for agent
+          clients.
+        </p>
+      </section>
+
+      <section className="border-b border-border py-8">
+        <SectionHeading
+          description="Use these values in agent clients that support a custom local API endpoint."
+          title="Client settings"
+        />
+        <div className="grid gap-2 sm:grid-cols-2">
+          {clientRows.map(([label, value]) => (
+            <Detail key={label} label={label} value={value} />
+          ))}
+        </div>
+      </section>
+
+      <section className="border-b border-border py-8" id="quick-start">
+        <SectionHeading
+          description="Install the release bundle, store your Cursor key, then start the local daemon."
+          title="Quick start"
+        />
+        <div className="space-y-3">
+          {setupSteps.map(([label, command], index) => (
+            <Step
+              command={command}
+              key={label}
+              label={`${index + 1}. ${label}`}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="border-b border-border py-8" id="agent-clients">
+        <SectionHeading
+          description="Any client that can set an OpenAI-compatible base URL can point at the daemon."
+          title="Agent clients"
+        />
+        <div className="space-y-4 text-sm leading-7 text-muted-foreground">
+          <p>
+            Use <code>cursor-local</code> as the local API key and choose either
+            Composer model name.
+          </p>
+          <CodeBlock
+            value={`OPENAI_BASE_URL=http://127.0.0.1:6903/v1
+OPENAI_API_KEY=cursor-local
+OPENAI_MODEL=composer-2.5-fast`}
+          />
+          <p>
+            The CLI also includes an agent configuration command for supported
+            clients, starting with OpenCode.
+          </p>
+          <CodeBlock value="cursor-api configure agent opencode" />
+        </div>
+      </section>
+
+      <section className="border-b border-border py-8" id="requests">
+        <SectionHeading
+          description="The server accepts common agent request shapes and translates them through the same Composer path."
+          title="Request examples"
+        />
+        <div className="grid gap-5 lg:grid-cols-2">
+          <div className="space-y-4 text-sm leading-7 text-muted-foreground">
+            <h3 className="text-base font-semibold text-foreground">
+              OpenAI-compatible
+            </h3>
+            <p>
+              Use the same shape most OpenAI-compatible agents already emit. Set{" "}
+              <code>stream</code> when your client expects server-sent events.
+            </p>
+            <CodeBlock
+              value={`POST http://127.0.0.1:6903/v1/chat/completions
+Authorization: Bearer cursor-local
+Content-Type: application/json
+
+{
+  "model": "composer-2.5-fast",
+  "messages": [
+    { "role": "user", "content": "Inspect this repo and suggest a fix." }
+  ],
+  "stream": true
+}`}
+            />
+          </div>
+
+          <div className="space-y-4 text-sm leading-7 text-muted-foreground">
+            <h3 className="text-base font-semibold text-foreground">
+              Anthropic-compatible
+            </h3>
+            <p>
+              The local server also accepts the Anthropic Messages shape for
+              Claude Code-style clients and translates it through the same
+              Composer path.
+            </p>
+            <CodeBlock
+              value={`POST http://127.0.0.1:6903/v1/messages
+x-api-key: cursor-local
+anthropic-version: 2023-06-01
+Content-Type: application/json
+
+{
+  "model": "composer-2.5",
+  "max_tokens": 1200,
+  "messages": [
+    { "role": "user", "content": "Plan the next edit." }
+  ]
+}`}
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-border py-8" id="api-surface">
+        <SectionHeading
+          description="The daemon binds to loopback and exposes only the local /v1 surface."
+          title="API surface"
+        />
+        <div className="space-y-3">
+          {endpointRows.map(([method, path, description]) => (
+            <div
+              className="grid gap-2 border-b border-border py-3 last:border-b-0 sm:grid-cols-[5rem_13rem_1fr]"
+              key={path}
+            >
+              <span className="font-mono text-xs font-semibold text-[var(--lagoon)]">
+                {method}
+              </span>
+              <code className="break-all font-mono text-xs">{path}</code>
+              <span className="text-sm leading-6 text-muted-foreground">
+                {description}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 max-w-2xl space-y-4 text-sm leading-7 text-muted-foreground">
+          <h3 className="text-base font-semibold text-foreground">
+            Model choice
+          </h3>
+          <p>
+            Use <code>composer-2.5</code> when an agent needs a more thorough
+            planning or editing pass.
+          </p>
+          <Separator />
+          <p>
+            Use <code>composer-2.5-fast</code> when you want quicker turn-taking
+            for iterative agent work.
+          </p>
+        </div>
+      </section>
+
+      <section className="border-b border-border py-8" id="runtime">
+        <SectionHeading
+          description="The release bundle keeps the Bun-compiled CLI and Node bridge separate."
+          title="Runtime lifecycle"
+        />
+        <div className="space-y-2">
+          {lifecycleRows.map(([label, value]) => (
+            <Detail key={label} label={label} value={value} />
+          ))}
+        </div>
+      </section>
+
+      <section className="border-b border-border py-8">
+        <SectionHeading
+          description="Use these checks before changing client configuration or reinstalling."
+          title="Troubleshooting"
+        />
+        <div className="space-y-2">
+          {troubleshootingRows.map(([label, value]) => (
+            <Detail key={label} label={label} value={value} />
+          ))}
+        </div>
+      </section>
+
+      <section className="border-b border-border py-8" id="commands">
+        <SectionHeading
+          description="The CLI command surface is grouped by daemon control, configuration, and operations."
+          title="Command reference"
+        />
+        <Tabs defaultValue="Server">
+          <TabsList className="mb-5 grid w-full grid-cols-3">
+            {Object.keys(commandGroups).map((group) => (
+              <TabsTrigger key={group} value={group}>
+                {group}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {Object.entries(commandGroups).map(([group, commands]) => (
+            <TabsContent key={group} value={group}>
+              <div className="grid gap-2">
+                {commands.map((command) => (
+                  <code
+                    className="block rounded-lg border border-border bg-muted px-3 py-2 font-mono text-sm"
+                    key={command}
+                  >
+                    {command}
+                  </code>
+                ))}
+              </div>
+            </TabsContent>
+          ))}
+        </Tabs>
+      </section>
+
+      <section className="border-b border-border py-8" id="storage">
+        <SectionHeading
+          description="User configuration lives under AppData and is preserved across release updates."
+          title="Where data lives"
+        />
+        <div className="space-y-2">
+          {storageRows.map(([label, value]) => (
+            <Detail key={label} label={label} value={value} />
+          ))}
+        </div>
+      </section>
+
+      <section className="py-8" id="credits">
+        <SectionHeading
+          description="cursor-api-cli-windows is independent and builds on prior MIT work."
+          title="Credits and scope"
+        />
+        <div className="grid gap-3 lg:grid-cols-2">
+          {creditRows.map(([name, description]) => (
+            <div
+              className="rounded-xl border border-border bg-muted/45 p-4"
+              key={name}
+            >
+              <h3 className="mb-2 text-sm font-semibold">{name}</h3>
+              <p className="m-0 text-sm leading-6 text-muted-foreground">
+                {description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </article>
+  </main>
+);
+
+export const Route = createFileRoute("/docs")({
+  component: Docs,
+});

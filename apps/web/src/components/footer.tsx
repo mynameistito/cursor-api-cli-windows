@@ -1,6 +1,6 @@
 const repoUrl = "https://github.com/mynameistito/cursor-api-cli-windows";
 
-export default function Footer() {
+export const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
@@ -24,4 +24,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+};

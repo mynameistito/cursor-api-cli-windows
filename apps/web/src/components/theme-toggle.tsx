@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 type ThemeMode = "light" | "dark" | "auto";
 
-function getInitialMode(): ThemeMode {
+const getInitialMode = (): ThemeMode => {
   if (typeof window === "undefined") {
     return "auto";
   }
@@ -16,11 +16,23 @@ function getInitialMode(): ThemeMode {
   }
 
   return "auto";
-}
+};
 
-function applyThemeMode(mode: ThemeMode) {
+const resolveThemeMode = (mode: ThemeMode, prefersDark: boolean) => {
+  if (mode !== "auto") {
+    return mode;
+  }
+
+  if (prefersDark) {
+    return "dark";
+  }
+
+  return "light";
+};
+
+const applyThemeMode = (mode: ThemeMode) => {
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const resolved = mode === "auto" ? (prefersDark ? "dark" : "light") : mode;
+  const resolved = resolveThemeMode(mode, prefersDark);
 
   document.documentElement.classList.remove("light", "dark");
   document.documentElement.classList.add(resolved);
@@ -32,9 +44,45 @@ function applyThemeMode(mode: ThemeMode) {
   }
 
   document.documentElement.style.colorScheme = resolved;
-}
+};
 
-export default function ThemeToggle() {
+const getNextMode = (mode: ThemeMode): ThemeMode => {
+  if (mode === "light") {
+    return "dark";
+  }
+
+  if (mode === "dark") {
+    return "auto";
+  }
+
+  return "light";
+};
+
+const getModeIcon = (mode: ThemeMode) => {
+  if (mode === "auto") {
+    return Monitor;
+  }
+
+  if (mode === "dark") {
+    return Moon;
+  }
+
+  return Sun;
+};
+
+const getModeText = (mode: ThemeMode) => {
+  if (mode === "auto") {
+    return "Auto";
+  }
+
+  if (mode === "dark") {
+    return "Dark";
+  }
+
+  return "Light";
+};
+
+export const ThemeToggle = () => {
   const [mode, setMode] = useState<ThemeMode>("auto");
 
   useEffect(() => {
@@ -57,20 +105,19 @@ export default function ThemeToggle() {
     };
   }, [mode]);
 
-  function toggleMode() {
-    const nextMode: ThemeMode =
-      mode === "light" ? "dark" : mode === "dark" ? "auto" : "light";
+  const toggleMode = () => {
+    const nextMode = getNextMode(mode);
     setMode(nextMode);
     applyThemeMode(nextMode);
     window.localStorage.setItem("theme", nextMode);
-  }
+  };
 
   const label =
     mode === "auto"
       ? "Theme mode: auto (system). Click to switch to light mode."
       : `Theme mode: ${mode}. Click to switch mode.`;
 
-  const Icon = mode === "auto" ? Monitor : mode === "dark" ? Moon : Sun;
+  const Icon = getModeIcon(mode);
 
   return (
     <Button
@@ -82,9 +129,7 @@ export default function ThemeToggle() {
       variant="outline"
     >
       <Icon className="size-4" />
-      <span className="hidden sm:inline">
-        {mode === "auto" ? "Auto" : mode === "dark" ? "Dark" : "Light"}
-      </span>
+      <span className="hidden sm:inline">{getModeText(mode)}</span>
     </Button>
   );
-}
+};
