@@ -50,6 +50,10 @@ function Stop-CursorApiIfRunning {
   if (Test-Path $exe) {
     try {
       & $exe stop 2>&1 | ForEach-Object { Write-Info $_ }
+      $stopExitCode = $LASTEXITCODE
+      if ($null -ne $stopExitCode -and $stopExitCode -ne 0) {
+        Write-Warn "cursor-api stop exited with code $stopExitCode."
+      }
     } catch {
       Write-Warn "cursor-api stop failed: $($_.Exception.Message)"
     }

@@ -19,22 +19,16 @@ No GUI — install from PowerShell, run `cursor-api` in the terminal, point any 
 
 ## Install (PowerShell)
 
-One-liner (downloads the latest GitHub release, adds to user PATH):
+Fresh install via downloaded script:
 
 ```powershell
-irm https://cursor-api-windows.mynameistito.com/install.ps1 | iex
+irm https://cursor-api-windows.mynameistito.com/install.ps1 -OutFile install.ps1
+.\install.ps1
 ```
 
 Full install steps and client setup: [cursor-api-windows.mynameistito.com/docs](https://cursor-api-windows.mynameistito.com/docs).
 
 Upgrade an existing install:
-
-```powershell
-$env:CURSOR_API_INSTALL_UPDATE = "1"
-irm https://cursor-api-windows.mynameistito.com/install.ps1 | iex
-```
-
-Or download and run:
 
 ```powershell
 irm https://cursor-api-windows.mynameistito.com/install.ps1 -OutFile install.ps1
@@ -89,7 +83,7 @@ cursor-api configure agent <id>  # opencode supported in v0.1
 | Method               | Command                                                                                                     |
 | -------------------- | ----------------------------------------------------------------------------------------------------------- |
 | From the CLI         | `cursor-api update check` then `cursor-api update`                                                          |
-| PowerShell installer | `$env:CURSOR_API_INSTALL_UPDATE = "1"; irm https://cursor-api-windows.mynameistito.com/install.ps1 \| iex`  |
+| PowerShell installer | `irm https://cursor-api-windows.mynameistito.com/install.ps1 -OutFile install.ps1; .\install.ps1 -Update`   |
 | Manual               | Download the latest `.zip` from [Releases](https://github.com/mynameistito/cursor-api-cli-windows/releases) |
 
 Updates stop the background server, replace files in the install directory, and preserve your
