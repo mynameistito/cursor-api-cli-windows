@@ -1,9 +1,9 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "ui": "tui",
+  "ui": "stream",
   "tasks": {
     "build": {
-      "dependsOn": ["^build", "generate-routes"],
+      "dependsOn": ["^build", "generate-routes", "cf-typegen"],
       "outputs": ["dist/**", ".output/**"]
     },
     "dev": {
@@ -15,9 +15,16 @@
       "dependsOn": ["^build", "generate-routes"]
     },
     "typecheck": {
-      "dependsOn": ["^build", "generate-routes"]
+      "dependsOn": ["^build", "generate-routes", "cf-typegen"]
     },
     "check": {},
+    "cf-typegen": {
+      "outputs": ["worker-configuration.d.ts"]
+    },
+    "deploy": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
     "knip": {},
     "fix": {
       "cache": false
