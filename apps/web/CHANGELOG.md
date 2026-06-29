@@ -1,5 +1,11 @@
 # @cursor-api-windows/web
 
+## 0.2.3
+
+### Patch Changes
+
+- 7d9e5fd: Make hosted installer one-liner update existing installs
+
 ## 0.2.2
 
 ### Patch Changes
