@@ -19,10 +19,11 @@ No GUI — install from PowerShell, run `cursor-api` in the terminal, point any 
 
 ## Install (PowerShell)
 
-One-liner (downloads the latest GitHub release, adds to user PATH):
+Fresh install via downloaded script:
 
 ```powershell
-irm https://cursor-api-windows.mynameistito.com/install.ps1 | iex
+irm https://cursor-api-windows.mynameistito.com/install.ps1 -OutFile install.ps1
+.\install.ps1
 ```
 
 Full install steps and client setup: [cursor-api-windows.mynameistito.com/docs](https://cursor-api-windows.mynameistito.com/docs).
@@ -32,13 +33,6 @@ Upgrade an existing install:
 ```powershell
 irm https://cursor-api-windows.mynameistito.com/install.ps1 -OutFile install.ps1
 .\install.ps1 -Update
-```
-
-For a fresh install via downloaded script:
-
-```powershell
-irm https://cursor-api-windows.mynameistito.com/install.ps1 -OutFile install.ps1
-.\install.ps1
 ```
 
 From a clone of this repo:

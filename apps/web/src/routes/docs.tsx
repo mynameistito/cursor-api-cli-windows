@@ -127,20 +127,26 @@ const docsNav = [
 
 const CopyButton = ({ value }: { value: string }) => {
   const [copied, setCopied] = useState(false);
+  const isMountedRef = useRef(true);
   const resetTimerRef = useRef<number | null>(null);
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    isMountedRef.current = true;
+
+    return () => {
+      isMountedRef.current = false;
       if (resetTimerRef.current !== null) {
         window.clearTimeout(resetTimerRef.current);
       }
-    },
-    []
-  );
+    };
+  }, []);
 
   const copyValue = async () => {
     try {
       await navigator.clipboard.writeText(value);
+      if (!isMountedRef.current) {
+        return;
+      }
       setCopied(true);
       if (resetTimerRef.current !== null) {
         window.clearTimeout(resetTimerRef.current);
@@ -150,6 +156,9 @@ const CopyButton = ({ value }: { value: string }) => {
         resetTimerRef.current = null;
       }, 1600);
     } catch {
+      if (!isMountedRef.current) {
+        return;
+      }
       setCopied(false);
     }
   };
