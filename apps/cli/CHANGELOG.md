@@ -1,5 +1,11 @@
 # @cursor-api-windows/cli
 
+## 0.1.13
+
+### Patch Changes
+
+- 7d9e5fd: Make installer one-liner update existing installs
+
 ## 0.1.12
 
 ### Patch Changes
