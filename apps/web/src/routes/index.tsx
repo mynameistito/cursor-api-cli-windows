@@ -26,7 +26,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-const repoUrl = "https://github.com/mynameistito/cursor-api-windows";
+const releasesUrl =
+  "https://github.com/mynameistito/cursor-api-windows/releases";
+const localBaseUrl = "http://127.0.0.1:6903/v1";
 const installCommand =
   "irm https://cursor-api-windows.mynameistito.com/install.ps1 | iex";
 
@@ -40,7 +42,7 @@ const agentClients = [
   {
     logo: "https://raw.githubusercontent.com/openai/agents.md/main/public/logos/codex.svg",
     name: "Codex",
-    setup: "OPENAI_BASE_URL=http://127.0.0.1:6903/v1",
+    setup: `OPENAI_BASE_URL=${localBaseUrl}`,
     status: "OpenAI shape",
   },
   {
@@ -58,7 +60,7 @@ const agentClients = [
   {
     logo: "https://raw.githubusercontent.com/openai/agents.md/main/public/logos/aider.svg",
     name: "Aider",
-    setup: "--openai-api-base http://127.0.0.1:6903/v1",
+    setup: `--openai-api-base ${localBaseUrl}`,
     status: "CLI-ready",
   },
   {
@@ -124,7 +126,7 @@ const runtimeTiles = [
   {
     icon: Server,
     title: "Base URL",
-    value: "http://127.0.0.1:6903/v1",
+    value: localBaseUrl,
   },
   {
     icon: Braces,
@@ -170,7 +172,7 @@ const CommandLine = ({ value }: { value: string }) => {
         {value}
       </span>
       <button
-        className="absolute right-0 inline-flex items-center gap-1 rounded-md border border-white/10 bg-[#080808] px-2 py-0.5 font-sans text-[0.68rem] font-medium text-zinc-500 opacity-100 transition hover:text-zinc-100 sm:opacity-0 sm:group-hover/line:opacity-100"
+        className="absolute right-0 inline-flex items-center gap-1 rounded-md border border-white/10 bg-[#080808] px-2 py-0.5 font-sans text-[0.68rem] font-medium text-zinc-500 opacity-100 transition hover:text-zinc-100 focus-visible:opacity-100 focus-visible:text-zinc-100 sm:opacity-0 sm:group-hover/line:opacity-100"
         onClick={copyValue}
         type="button"
       >
@@ -257,20 +259,18 @@ const HeroConsole = () => (
               </span>
               <X className="ml-8 size-3.5 text-zinc-300" />
             </div>
-            <button
-              aria-label="New tab"
+            <span
+              aria-hidden="true"
               className="flex w-11 items-center justify-center border-x border-white/5 text-zinc-300 hover:bg-white/[0.05]"
-              type="button"
             >
               <Plus className="size-4" />
-            </button>
-            <button
-              aria-label="Tab menu"
+            </span>
+            <span
+              aria-hidden="true"
               className="flex w-9 items-center justify-center text-zinc-300 hover:bg-white/[0.05]"
-              type="button"
             >
               <ChevronDown className="size-4" />
-            </button>
+            </span>
           </div>
           <div className="hidden items-center sm:flex">
             <span className="flex h-9 w-11 items-center justify-center text-zinc-300">
@@ -313,8 +313,8 @@ const HeroConsole = () => (
           ))}
         </div>
         <div className="rounded-xl border border-[color-mix(in_oklab,var(--lagoon)_35%,transparent)] bg-[color-mix(in_oklab,var(--lagoon)_12%,transparent)] p-4 text-zinc-400">
-          Base URL: <span className="text-zinc-100">/v1</span> · API key:{" "}
-          <span className="text-zinc-100">cursor-local</span>
+          Base URL: <span className="text-zinc-100">{localBaseUrl}</span> · API
+          key: <span className="text-zinc-100">cursor-local</span>
         </div>
       </CardContent>
     </Card>
@@ -344,7 +344,7 @@ const App = () => (
             className="rounded-full px-6 shadow-[0_16px_40px_rgba(0,107,255,0.18)] active:translate-y-px"
             size="lg"
           >
-            <a href={repoUrl} rel="noreferrer" target="_blank">
+            <a href={releasesUrl} rel="noreferrer" target="_blank">
               View Releases
               <ArrowRight className="size-4" />
             </a>
