@@ -399,72 +399,79 @@ const AgentSetupCard = ({
   settings,
   steps,
 }: (typeof agentSetupRows)[number]) => (
-  <div className="rounded-xl border border-border bg-background shadow-[var(--shadow-card)]">
-    <div className="border-b border-border p-4 sm:p-5">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <h3 className="m-0 text-lg font-semibold tracking-[-0.025em] text-foreground">
+  <section className="scroll-mt-24 border-b border-border py-8 last:border-b-0">
+    <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
+      <div>
+        <h3 className="mb-2 text-xl font-semibold tracking-[-0.03em] text-foreground">
           {name}
         </h3>
-        <AvailablePill />
+        <p className="m-0 max-w-3xl text-sm leading-7 text-muted-foreground">
+          {description}
+        </p>
       </div>
-      <p className="m-0 text-sm leading-6 text-muted-foreground">
-        {description}
-      </p>
+      <AvailablePill />
     </div>
 
-    <div className="grid gap-0 lg:grid-cols-[minmax(0,1.05fr)_minmax(17rem,0.95fr)]">
-      <div className="border-b border-border p-4 sm:p-5 lg:border-r lg:border-b-0">
-        <div className="mb-3 font-medium text-foreground text-sm">
-          Setup steps
-        </div>
-        <ol className="m-0 space-y-3 p-0">
-          {steps.map(([label, value], index) => (
-            <li className="grid grid-cols-[1.75rem_1fr] gap-3" key={label}>
-              <span className="flex size-7 items-center justify-center rounded-full border border-border bg-[var(--geist-gray-alpha-100)] font-mono text-[0.7rem] text-muted-foreground">
-                {index + 1}
-              </span>
-              <div className="min-w-0">
-                <div className="mb-1 text-sm font-medium text-foreground">
+    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_16rem]">
+      <div className="min-w-0 space-y-7">
+        <div>
+          <h4 className="mb-3 text-base font-semibold tracking-[-0.02em] text-foreground">
+            Required settings
+          </h4>
+          <div className="overflow-hidden rounded-lg border border-border">
+            {settings.map(([label, value]) => (
+              <div
+                className="grid gap-1 border-b border-border px-3 py-2.5 last:border-b-0 sm:grid-cols-[10rem_1fr]"
+                key={label}
+              >
+                <span className="text-muted-foreground text-sm leading-6">
                   {label}
-                </div>
-                {value.startsWith("cursor-api") || value.startsWith("http") ? (
-                  <CodeBlock value={value} />
-                ) : (
-                  <p className="m-0 text-sm leading-6 text-muted-foreground">
-                    {value}
-                  </p>
-                )}
+                </span>
+                <code className="break-all border-0 bg-transparent p-0 font-mono text-xs leading-6 text-foreground">
+                  {value}
+                </code>
               </div>
-            </li>
-          ))}
-        </ol>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <h4 className="mb-3 text-base font-semibold tracking-[-0.02em] text-foreground">
+            Setup steps
+          </h4>
+          <ol className="m-0 space-y-4 p-0">
+            {steps.map(([label, value], index) => (
+              <li className="grid grid-cols-[1.75rem_1fr] gap-3" key={label}>
+                <span className="mt-0.5 flex size-7 items-center justify-center rounded-full border border-border bg-background font-mono text-[0.7rem] text-muted-foreground">
+                  {index + 1}
+                </span>
+                <div className="min-w-0">
+                  <div className="mb-1 text-sm font-medium text-foreground">
+                    {label}
+                  </div>
+                  {value.startsWith("cursor-api") ||
+                  value.startsWith("http") ? (
+                    <CodeBlock value={value} />
+                  ) : (
+                    <p className="m-0 text-sm leading-7 text-muted-foreground">
+                      {value}
+                    </p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
 
-      <div className="p-4 sm:p-5">
-        <div className="mb-3 font-medium text-foreground text-sm">
-          Required settings
-        </div>
-        <div className="mb-5 rounded-lg border border-border bg-[var(--geist-gray-alpha-100)]">
-          {settings.map(([label, value]) => (
-            <div
-              className="grid gap-1 border-b border-border px-3 py-2.5 last:border-b-0 sm:grid-cols-[8rem_1fr]"
-              key={label}
-            >
-              <span className="text-muted-foreground text-xs leading-5">
-                {label}
-              </span>
-              <code className="break-all border-0 bg-transparent p-0 font-mono text-xs leading-5 text-foreground">
-                {value}
-              </code>
-            </div>
-          ))}
-        </div>
-
-        <div className="mb-3 font-medium text-foreground text-sm">Notes</div>
-        <ul className="m-0 space-y-2 p-0">
+      <aside className="lg:border-l lg:border-border lg:pl-5">
+        <h4 className="mb-3 text-base font-semibold tracking-[-0.02em] text-foreground">
+          Notes
+        </h4>
+        <ul className="m-0 space-y-3 p-0">
           {notes.map((note) => (
             <li
-              className="grid grid-cols-[0.75rem_1fr] gap-2 text-sm leading-6 text-muted-foreground"
+              className="grid grid-cols-[0.75rem_1fr] gap-2 text-sm leading-7 text-muted-foreground"
               key={note}
             >
               <span className="mt-2 size-1.5 rounded-full bg-[var(--geist-blue-700)]" />
@@ -472,9 +479,9 @@ const AgentSetupCard = ({
             </li>
           ))}
         </ul>
-      </div>
+      </aside>
     </div>
-  </div>
+  </section>
 );
 
 const DocsRail = () => (
