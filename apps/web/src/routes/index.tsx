@@ -331,7 +331,7 @@ const App = () => (
           className="mb-5 rounded-full border-[color-mix(in_oklab,var(--lagoon)_32%,var(--border))] bg-background/80 px-3 py-1 font-mono text-xs"
           variant="outline"
         >
-          Cursor Composer for local agents
+          Cursor Composer 2.5 API for Local AI Harnesses
         </Badge>
         <h1 className="mb-5 max-w-4xl text-5xl font-semibold leading-[0.96] tracking-[-0.065em] text-foreground sm:text-6xl lg:text-7xl">
           Put Composer behind every coding agent.
