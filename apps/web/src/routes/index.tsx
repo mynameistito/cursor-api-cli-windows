@@ -36,38 +36,26 @@ const agentClients = [
   {
     logo: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/opencode.svg",
     name: "OpenCode",
-    setup: "cursor-api configure agent opencode",
-    status: "Autoconfigured",
   },
   {
     logo: "https://raw.githubusercontent.com/openai/agents.md/main/public/logos/codex.svg",
     name: "Codex",
-    setup: `OPENAI_BASE_URL=${localBaseUrl}`,
-    status: "OpenAI shape",
   },
   {
     logo: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/pi-coding-agent.svg",
     name: "Pi",
-    setup: "OPENAI_API_KEY=cursor-local",
-    status: "Local API",
   },
   {
     logo: "https://raw.githubusercontent.com/openai/agents.md/main/public/logos/kilo-code.svg",
     name: "Kilo Code",
-    setup: "OPENAI_MODEL=composer-2.5-fast",
-    status: "Composer fast",
   },
   {
     logo: "https://raw.githubusercontent.com/openai/agents.md/main/public/logos/aider.svg",
     name: "Aider",
-    setup: `--openai-api-base ${localBaseUrl}`,
-    status: "CLI-ready",
   },
   {
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg",
     name: "VS Code",
-    setup: "Use the same /v1 base URL in compatible extensions",
-    status: "Extensions",
   },
 ] as const;
 
@@ -166,7 +154,7 @@ const CommandLine = ({ value }: { value: string }) => {
   return (
     <div className="group/line relative flex min-w-0 items-center gap-1.5 rounded-sm py-0.5 pr-9 text-[0.68rem] leading-5 transition hover:bg-white/[0.04]">
       <span className="shrink-0 select-none text-zinc-400">
-        PS C:\Users\mynameistito&gt;
+        PS C:\Users\user&gt;
       </span>
       <span className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap text-zinc-100 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {value}
@@ -185,7 +173,7 @@ const CommandLine = ({ value }: { value: string }) => {
 
 const AgentLogo = ({ logo, name }: { logo: string; name: string }) => (
   <span
-    className={`flex size-11 items-center justify-center rounded-2xl border border-border shadow-[0_1px_0_rgba(255,255,255,0.08)_inset] ${
+    className={`flex size-11 items-center justify-center rounded-lg border border-border shadow-[var(--shadow-card)] ${
       name === "Pi" ? "bg-zinc-950" : "bg-background/90"
     }`}
   >
@@ -200,25 +188,18 @@ const AgentLogo = ({ logo, name }: { logo: string; name: string }) => (
   </span>
 );
 
-const AgentCard = ({
-  logo,
-  name,
-  setup,
-  status,
-}: (typeof agentClients)[number]) => (
-  <article className="group rounded-[1.25rem] border border-border bg-card/78 p-4 shadow-none backdrop-blur transition hover:-translate-y-1 hover:border-[color-mix(in_oklab,var(--lagoon)_42%,var(--border))]">
+const AgentCard = ({ logo, name }: (typeof agentClients)[number]) => (
+  <article className="group rounded-lg border border-border bg-card p-4 shadow-[var(--shadow-card)] transition hover:border-[var(--geist-gray-alpha-500)]">
     <div className="mb-5 flex items-start justify-between gap-4">
       <AgentLogo logo={logo} name={name} />
-      <span className="rounded-full border border-border bg-muted/60 px-2.5 py-1 font-mono text-[0.66rem] text-muted-foreground">
-        {status}
+      <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1 font-medium text-[0.68rem] text-muted-foreground">
+        <span className="status-pulse size-1.5 rounded-full bg-[var(--geist-green-700)]" />
+        Available
       </span>
     </div>
     <h3 className="m-0 text-base font-semibold tracking-[-0.02em] text-foreground">
       {name}
     </h3>
-    <p className="mt-3 min-h-10 break-words font-mono text-xs leading-5 text-muted-foreground">
-      {setup}
-    </p>
   </article>
 );
 
@@ -231,29 +212,28 @@ const InfoTile = ({
   title: string;
   value: string;
 }) => (
-  <Card className="rounded-[1.15rem] border-border bg-card/80 shadow-none transition-transform hover:-translate-y-1">
+  <Card className="border-border bg-card transition-colors hover:border-[var(--geist-gray-alpha-500)]">
     <CardContent className="space-y-4 p-5">
-      <Icon className="size-5 text-[var(--lagoon)]" />
+      <Icon className="size-5 text-[var(--geist-blue-700)]" />
       <div>
         <h3 className="mb-2 text-sm font-semibold">{title}</h3>
         <p className="m-0 break-words font-mono text-xs leading-5 text-muted-foreground">
           {value}
         </p>
       </div>
-      <CheckCircle2 className="size-4 text-[var(--palm)]" />
+      <CheckCircle2 className="size-4 text-[var(--geist-green-700)]" />
     </CardContent>
   </Card>
 );
 
 const HeroConsole = () => (
   <div className="relative rise-in [animation-delay:120ms]">
-    <div className="absolute -left-8 top-12 hidden h-32 w-32 rounded-full bg-[color-mix(in_oklab,var(--lagoon)_24%,transparent)] blur-3xl lg:block" />
-    <Card className="relative overflow-hidden rounded-[1.35rem] border-border bg-[#080808] py-0 text-zinc-100 shadow-[0_28px_90px_rgba(0,0,0,0.22)] backdrop-blur dark:bg-[#080808]">
+    <Card className="relative overflow-hidden rounded-lg border-border bg-[#080808] py-0 text-zinc-100 shadow-[var(--shadow-card)] dark:bg-[#080808]">
       <div className="border-b border-white/5 bg-[#2b2b2b]">
         <div className="flex h-9 items-stretch justify-between text-sm text-zinc-300">
           <div className="flex min-w-0 items-stretch">
             <div className="flex min-w-0 items-center gap-2 rounded-br-md bg-[#080808] px-2.5 text-zinc-100">
-              <span className="flex size-4 items-center justify-center rounded-[3px] border border-[#5f8fce]/60 bg-[#111827] text-[0.6rem] text-[#8bc7ff]">
+              <span className="flex size-4 items-center justify-center rounded-[3px] border border-[var(--geist-blue-900)] bg-[#111827] text-[0.6rem] text-[var(--geist-blue-900)]">
                 &gt;_
               </span>
               <span className="truncate font-sans text-xs font-semibold">
@@ -290,7 +270,7 @@ const HeroConsole = () => (
       <CardContent className="space-y-3 p-4 font-mono text-sm leading-6">
         <div className="space-y-0 text-zinc-300">
           <div>PowerShell 7.6.3</div>
-          <div>PS C:\Users\mynameistito&gt;</div>
+          <div>PS C:\Users\user&gt;</div>
         </div>
         <div className="space-y-0 overflow-hidden">
           {quickStart.map((command) => (
@@ -301,11 +281,11 @@ const HeroConsole = () => (
         <div className="grid gap-3 sm:grid-cols-2">
           {models.map(([name, description]) => (
             <div
-              className="rounded-xl border border-white/10 bg-white/[0.04] p-4"
+              className="rounded-lg border border-white/10 bg-white/[0.04] p-4"
               key={name}
             >
               <div className="mb-2 flex items-center gap-2 text-zinc-100">
-                <Bot className="size-4 text-[var(--lagoon)]" />
+                <Bot className="size-4 text-[var(--geist-blue-700)]" />
                 <span>{name}</span>
               </div>
               <p className="m-0 font-sans text-sm leading-6 text-zinc-400">
@@ -314,7 +294,7 @@ const HeroConsole = () => (
             </div>
           ))}
         </div>
-        <div className="rounded-xl border border-[color-mix(in_oklab,var(--lagoon)_35%,transparent)] bg-[color-mix(in_oklab,var(--lagoon)_12%,transparent)] p-4 text-zinc-400">
+        <div className="rounded-lg border border-[color-mix(in_oklab,var(--geist-blue-700)_35%,transparent)] bg-[color-mix(in_oklab,var(--geist-blue-700)_12%,transparent)] p-4 text-zinc-400">
           Base URL: <span className="text-zinc-100">{localBaseUrl}</span> · API
           key: <span className="text-zinc-100">cursor-local</span>
         </div>
@@ -328,7 +308,7 @@ const App = () => (
     <section className="grid min-h-[calc(100dvh-6rem)] items-center gap-10 lg:grid-cols-[0.95fr_1.05fr]">
       <div className="max-w-3xl rise-in">
         <Badge
-          className="mb-5 rounded-full border-[color-mix(in_oklab,var(--lagoon)_32%,var(--border))] bg-background/80 px-3 py-1 font-mono text-xs"
+          className="mb-5 border-[color-mix(in_oklab,var(--geist-blue-700)_32%,var(--border))] bg-background px-3 py-1 font-mono text-xs"
           variant="outline"
         >
           Cursor Composer 2.5 API for Local AI Harnesses
@@ -343,7 +323,7 @@ const App = () => (
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button
             asChild
-            className="rounded-full px-6 text-primary-foreground no-underline shadow-[0_16px_40px_rgba(0,107,255,0.18)] hover:text-primary-foreground active:translate-y-px"
+            className="px-3.5 text-primary-foreground no-underline hover:text-primary-foreground active:translate-y-px"
             size="lg"
           >
             <a href={releasesUrl} rel="noreferrer" target="_blank">
@@ -353,7 +333,7 @@ const App = () => (
           </Button>
           <Button
             asChild
-            className="rounded-full bg-background/70 px-6 active:translate-y-px"
+            className="bg-background px-3.5 active:translate-y-px"
             size="lg"
             variant="outline"
           >
@@ -371,8 +351,8 @@ const App = () => (
           Allowed where agents can point at a local API.
         </h2>
         <p className="mt-3 text-base leading-7 text-muted-foreground">
-          OpenAI-compatible clients use the same localhost endpoint, key, and
-          Composer model names.
+          Each supported client can point at the same local OpenAI-compatible
+          endpoint.
         </p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
@@ -386,11 +366,11 @@ const App = () => (
       <div className="grid auto-rows-fr gap-4 sm:grid-cols-2">
         {highlights.map(({ description, icon: Icon, title }) => (
           <Card
-            className="group h-full rounded-[1.25rem] border-border bg-card/82 shadow-none transition-transform hover:-translate-y-1"
+            className="group h-full border-border bg-card transition-colors hover:border-[var(--geist-gray-alpha-500)]"
             key={title}
           >
             <CardHeader>
-              <div className="mb-4 flex size-10 items-center justify-center rounded-2xl border border-border bg-muted text-[var(--lagoon)]">
+              <div className="mb-4 flex size-10 items-center justify-center rounded-lg border border-border bg-muted text-[var(--geist-blue-700)]">
                 <Icon className="size-4" />
               </div>
               <CardTitle className="text-base tracking-[-0.02em]">
@@ -404,10 +384,10 @@ const App = () => (
         ))}
       </div>
 
-      <Card className="rounded-[1.35rem] border-[color-mix(in_oklab,var(--lagoon)_26%,var(--border))] bg-[color-mix(in_oklab,var(--lagoon)_8%,var(--card))] shadow-none">
+      <Card className="rounded-lg border-[color-mix(in_oklab,var(--geist-blue-700)_26%,var(--border))] bg-[color-mix(in_oklab,var(--geist-blue-700)_8%,var(--card))]">
         <CardContent className="flex h-full flex-col justify-between gap-10 p-6">
           <div className="space-y-4">
-            <PlugZap className="size-6 text-[var(--lagoon)]" />
+            <PlugZap className="size-6 text-[var(--geist-blue-700)]" />
             <h2 className="m-0 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
               Drop it into the tools you already use.
             </h2>
@@ -416,7 +396,7 @@ const App = () => (
               key, and either Composer model name.
             </p>
           </div>
-          <Button asChild className="w-fit rounded-full" variant="outline">
+          <Button asChild className="w-fit" variant="outline">
             <Link to="/docs">Open setup guide</Link>
           </Button>
         </CardContent>

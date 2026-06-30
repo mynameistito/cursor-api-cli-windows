@@ -41,84 +41,134 @@
 
 :root {
   --radius: 0.375rem;
-  --background: #ffffff;
-  --foreground: #171717;
-  --card: #ffffff;
-  --card-foreground: #171717;
-  --popover: #ffffff;
-  --popover-foreground: #171717;
-  --primary: #171717;
-  --primary-foreground: #ffffff;
-  --secondary: #f2f2f2;
-  --secondary-foreground: #171717;
-  --muted: #f2f2f2;
-  --muted-foreground: #4d4d4d;
-  --accent: #f2f2f2;
-  --accent-foreground: #171717;
-  --destructive: #ea001d;
-  --border: #0000001a;
-  --input: #0000001a;
-  --ring: #006bff;
-  --sea-ink: var(--foreground);
-  --sea-ink-soft: var(--muted-foreground);
-  --lagoon: #006bff;
-  --lagoon-deep: #0059ec;
-  --palm: #28a948;
-  --sand: #fafafa;
-  --foam: #ffffff;
-  --surface: rgba(255, 255, 255, 0.82);
-  --surface-strong: rgba(255, 255, 255, 0.96);
+  --geist-background-100: #ffffff;
+  --geist-background-200: #fafafa;
+  --geist-gray-100: #f2f2f2;
+  --geist-gray-200: #ebebeb;
+  --geist-gray-300: #e6e6e6;
+  --geist-gray-400: #eaeaea;
+  --geist-gray-500: #c9c9c9;
+  --geist-gray-600: #a8a8a8;
+  --geist-gray-700: #8f8f8f;
+  --geist-gray-800: #7d7d7d;
+  --geist-gray-900: #4d4d4d;
+  --geist-gray-1000: #171717;
+  --geist-gray-alpha-100: #0000000d;
+  --geist-gray-alpha-200: #00000015;
+  --geist-gray-alpha-300: #0000001a;
+  --geist-gray-alpha-400: #00000014;
+  --geist-gray-alpha-500: #00000036;
+  --geist-gray-alpha-600: #0000003d;
+  --geist-blue-100: #f0f7ff;
+  --geist-blue-700: #006bff;
+  --geist-blue-800: #0059ec;
+  --geist-blue-900: #005ff2;
+  --geist-red-100: #ffeeef;
+  --geist-red-800: #ea001d;
+  --geist-amber-100: #fff6de;
+  --geist-amber-900: #aa4d00;
+  --geist-green-100: #ecfdec;
+  --geist-green-700: #28a948;
+  --background: var(--geist-background-100);
+  --foreground: var(--geist-gray-1000);
+  --card: var(--geist-background-100);
+  --card-foreground: var(--geist-gray-1000);
+  --popover: var(--geist-background-100);
+  --popover-foreground: var(--geist-gray-1000);
+  --primary: var(--geist-gray-1000);
+  --primary-foreground: var(--geist-background-100);
+  --secondary: var(--geist-gray-100);
+  --secondary-foreground: var(--geist-gray-1000);
+  --muted: var(--geist-gray-100);
+  --muted-foreground: var(--geist-gray-900);
+  --accent: var(--geist-gray-100);
+  --accent-foreground: var(--geist-gray-1000);
+  --destructive: var(--geist-red-800);
+  --border: var(--geist-gray-alpha-300);
+  --input: var(--geist-gray-alpha-300);
+  --ring: var(--geist-blue-700);
+  --sand: var(--geist-background-200);
+  --foam: var(--geist-background-100);
+  --surface: var(--geist-background-100);
+  --surface-strong: var(--geist-background-100);
   --line: var(--border);
   --inset-glint: rgba(255, 255, 255, 0.9);
-  --kicker: #4d4d4d;
+  --kicker: var(--geist-gray-900);
   --bg-base: var(--background);
-  --header-bg: rgba(255, 255, 255, 0.82);
-  --chip-bg: #ffffff;
-  --chip-line: #0000001a;
-  --link-bg-hover: #f2f2f2;
-  --hero-a: rgba(0, 107, 255, 0.08);
-  --hero-b: rgba(23, 23, 23, 0.06);
+  --header-bg: rgba(255, 255, 255, 0.86);
+  --chip-bg: var(--geist-background-100);
+  --chip-line: var(--geist-gray-alpha-300);
+  --link-bg-hover: var(--geist-gray-100);
+  --hero-a: rgba(0, 107, 255, 0.06);
+  --hero-b: rgba(23, 23, 23, 0.04);
+  --focus-ring: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+  --shadow-card: 0 2px 2px rgba(0, 0, 0, 0.04);
 }
 
 :root[data-theme="dark"],
 :root.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --card: #111111;
-  --card-foreground: #ededed;
-  --popover: #111111;
-  --popover-foreground: #ededed;
-  --primary: #ededed;
-  --primary-foreground: #0a0a0a;
-  --secondary: #1f1f1f;
-  --secondary-foreground: #ededed;
-  --muted: #1f1f1f;
-  --muted-foreground: #a1a1a1;
-  --accent: #1f1f1f;
-  --accent-foreground: #ededed;
-  --destructive: #ff676d;
-  --border: #ffffff24;
-  --input: #ffffff24;
-  --ring: #48aeff;
-  --sea-ink: var(--foreground);
-  --sea-ink-soft: var(--muted-foreground);
-  --lagoon: #48aeff;
-  --lagoon-deep: #94ccff;
-  --palm: #4ce15e;
-  --sand: #111111;
-  --foam: #0a0a0a;
-  --surface: rgba(17, 17, 17, 0.82);
-  --surface-strong: rgba(17, 17, 17, 0.96);
+  --geist-background-100: #000000;
+  --geist-background-200: #000000;
+  --geist-gray-100: #1a1a1a;
+  --geist-gray-200: #1f1f1f;
+  --geist-gray-300: #292929;
+  --geist-gray-400: #2e2e2e;
+  --geist-gray-500: #454545;
+  --geist-gray-600: #878787;
+  --geist-gray-700: #8f8f8f;
+  --geist-gray-800: #7d7d7d;
+  --geist-gray-900: #a0a0a0;
+  --geist-gray-1000: #ededed;
+  --geist-gray-alpha-100: #ffffff12;
+  --geist-gray-alpha-200: #ffffff17;
+  --geist-gray-alpha-300: #ffffff21;
+  --geist-gray-alpha-400: #ffffff24;
+  --geist-gray-alpha-500: #ffffff3d;
+  --geist-gray-alpha-600: #ffffff82;
+  --geist-blue-100: #06193a;
+  --geist-blue-700: #006efe;
+  --geist-blue-800: #005be7;
+  --geist-blue-900: #47a8ff;
+  --geist-red-100: #330a11;
+  --geist-red-800: #e2162a;
+  --geist-amber-100: #2a1700;
+  --geist-amber-900: #ff9300;
+  --geist-green-100: #002608;
+  --geist-green-700: #00ac3a;
+  --background: var(--geist-background-100);
+  --foreground: var(--geist-gray-1000);
+  --card: var(--geist-background-100);
+  --card-foreground: var(--geist-gray-1000);
+  --popover: var(--geist-background-100);
+  --popover-foreground: var(--geist-gray-1000);
+  --primary: var(--geist-gray-1000);
+  --primary-foreground: var(--geist-background-100);
+  --secondary: var(--geist-gray-100);
+  --secondary-foreground: var(--geist-gray-1000);
+  --muted: var(--geist-gray-100);
+  --muted-foreground: var(--geist-gray-900);
+  --accent: var(--geist-gray-100);
+  --accent-foreground: var(--geist-gray-1000);
+  --destructive: var(--geist-red-800);
+  --border: var(--geist-gray-alpha-400);
+  --input: var(--geist-gray-alpha-400);
+  --ring: var(--geist-blue-900);
+  --sand: var(--geist-background-200);
+  --foam: var(--geist-background-100);
+  --surface: var(--geist-background-100);
+  --surface-strong: var(--geist-background-100);
   --line: var(--border);
   --inset-glint: rgba(255, 255, 255, 0.08);
-  --kicker: #a1a1a1;
+  --kicker: var(--geist-gray-900);
   --bg-base: var(--background);
-  --header-bg: rgba(10, 10, 10, 0.82);
-  --chip-bg: #111111;
-  --chip-line: #ffffff24;
-  --link-bg-hover: #1f1f1f;
-  --hero-a: rgba(72, 174, 255, 0.13);
-  --hero-b: rgba(255, 255, 255, 0.06);
+  --header-bg: rgba(0, 0, 0, 0.86);
+  --chip-bg: var(--geist-background-100);
+  --chip-line: var(--geist-gray-alpha-400);
+  --link-bg-hover: var(--geist-gray-100);
+  --hero-a: rgba(0, 110, 254, 0.1);
+  --hero-b: rgba(255, 255, 255, 0.04);
+  --focus-ring: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.16);
 }
 
 * {
@@ -176,21 +226,25 @@ body::after {
 }
 
 a:not([data-slot="button"]) {
-  color: var(--lagoon-deep);
-  text-decoration-color: rgba(50, 143, 151, 0.4);
+  color: var(--geist-blue-800);
+  text-decoration-color: color-mix(
+    in oklab,
+    var(--geist-blue-700) 42%,
+    transparent
+  );
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
 
 a:not([data-slot="button"]):hover {
-  color: #246f76;
+  color: var(--geist-blue-700);
 }
 
 code {
   font-size: 0.9em;
   border: 1px solid var(--line);
-  background: color-mix(in oklab, var(--surface-strong) 82%, white 18%);
-  border-radius: 7px;
+  background: var(--geist-gray-alpha-100);
+  border-radius: var(--radius);
   padding: 2px 7px;
 }
 
@@ -209,41 +263,30 @@ pre code {
 }
 
 .display-title {
-  font-family: "Fraunces", Georgia, serif;
+  font-family: var(--font-sans);
 }
 
 .island-shell {
   border: 1px solid var(--line);
-  background: linear-gradient(165deg, var(--surface-strong), var(--surface));
-  box-shadow:
-    0 1px 0 var(--inset-glint) inset,
-    0 22px 44px rgba(30, 90, 72, 0.1),
-    0 6px 18px rgba(23, 58, 64, 0.08);
-  backdrop-filter: blur(4px);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow-card);
 }
 
 .feature-card {
-  background: linear-gradient(
-    165deg,
-    color-mix(in oklab, var(--surface-strong) 93%, white 7%),
-    var(--surface)
-  );
-  box-shadow:
-    0 1px 0 var(--inset-glint) inset,
-    0 18px 34px rgba(30, 90, 72, 0.1),
-    0 4px 14px rgba(23, 58, 64, 0.06);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow-card);
 }
 
 .feature-card:hover {
   transform: translateY(-2px);
-  border-color: color-mix(in oklab, var(--lagoon-deep) 35%, var(--line));
+  border-color: color-mix(in oklab, var(--geist-blue-800) 35%, var(--line));
 }
 
 .demo-page {
   width: min(1080px, calc(100% - 2rem));
   margin-inline: auto;
   padding-block: clamp(2.25rem, 6vw, 4.5rem);
-  color: var(--sea-ink);
+  color: var(--foreground);
 }
 
 .demo-page-wide {
@@ -260,42 +303,38 @@ pre code {
 .demo-panel,
 .demo-card {
   border: 1px solid var(--line);
-  background: linear-gradient(165deg, var(--surface-strong), var(--surface));
-  box-shadow:
-    0 1px 0 var(--inset-glint) inset,
-    0 18px 34px rgba(30, 90, 72, 0.1),
-    0 4px 14px rgba(23, 58, 64, 0.06);
-  backdrop-filter: blur(4px);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow-card);
 }
 
 .demo-panel {
-  border-radius: 1.25rem;
+  border-radius: 1rem;
   padding: clamp(1.25rem, 4vw, 2rem);
 }
 
 .demo-card {
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   padding: 1rem;
 }
 
 .demo-title {
   margin: 0;
-  color: var(--sea-ink);
+  color: var(--foreground);
   font-size: clamp(1.75rem, 4vw, 2.75rem);
   line-height: 1.05;
-  font-weight: 800;
-  letter-spacing: 0;
+  font-weight: 600;
+  letter-spacing: -0.04em;
 }
 
 .demo-section-title {
   margin: 0;
-  color: var(--sea-ink);
+  color: var(--foreground);
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .demo-muted {
-  color: var(--sea-ink-soft);
+  color: var(--muted-foreground);
 }
 
 .demo-input,
@@ -303,9 +342,9 @@ pre code {
 .demo-textarea {
   width: 100%;
   border: 1px solid var(--line);
-  border-radius: 0.75rem;
-  background: color-mix(in oklab, var(--surface-strong) 88%, white 12%);
-  color: var(--sea-ink);
+  border-radius: var(--radius);
+  background: var(--background);
+  color: var(--foreground);
   outline: none;
   transition:
     border-color 180ms ease,
@@ -331,8 +370,8 @@ pre code {
 .demo-input:focus,
 .demo-select:focus,
 .demo-textarea:focus {
-  border-color: color-mix(in oklab, var(--lagoon-deep) 58%, var(--line));
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--lagoon) 24%, transparent);
+  border-color: var(--ring);
+  box-shadow: var(--focus-ring);
 }
 
 .demo-button {
@@ -340,20 +379,20 @@ pre code {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border: 1px solid color-mix(in oklab, var(--lagoon-deep) 34%, var(--line));
-  border-radius: 0.85rem;
-  background: color-mix(in oklab, var(--lagoon) 22%, var(--surface-strong));
-  color: var(--sea-ink);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: var(--primary-foreground);
   padding: 0.72rem 1rem;
   font-size: 0.9rem;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1;
   cursor: pointer;
 }
 
 .demo-button:hover {
   transform: translateY(-1px);
-  background: color-mix(in oklab, var(--lagoon) 30%, var(--surface-strong));
+  background: color-mix(in oklab, var(--primary) 92%, var(--background));
 }
 
 .demo-button:disabled {
@@ -364,20 +403,20 @@ pre code {
 
 .demo-button-secondary {
   border-color: var(--line);
-  background: color-mix(in oklab, var(--surface-strong) 74%, transparent);
-  color: var(--sea-ink-soft);
+  background: var(--background);
+  color: var(--foreground);
 }
 
 .demo-button-danger {
-  border-color: rgba(196, 71, 71, 0.28);
-  background: rgba(196, 71, 71, 0.1);
-  color: #9f3030;
+  border-color: var(--destructive);
+  background: var(--destructive);
+  color: #ffffff;
 }
 
 .demo-list-item {
   border: 1px solid var(--line);
-  border-radius: 0.9rem;
-  background: color-mix(in oklab, var(--chip-bg) 82%, transparent);
+  border-radius: 0.75rem;
+  background: var(--background);
   padding: 0.9rem 1rem;
 }
 
@@ -388,44 +427,44 @@ pre code {
   border: 1px solid var(--chip-line);
   border-radius: 999px;
   background: var(--chip-bg);
-  color: var(--sea-ink-soft);
+  color: var(--muted-foreground);
   padding: 0.35rem 0.65rem;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .demo-alert {
-  border: 1px solid rgba(193, 126, 42, 0.3);
-  border-radius: 1rem;
-  background: rgba(193, 126, 42, 0.1);
-  color: var(--sea-ink);
+  border: 1px solid color-mix(in oklab, var(--geist-amber-900) 30%, var(--line));
+  border-radius: 0.75rem;
+  background: var(--geist-amber-100);
+  color: var(--foreground);
   padding: 1rem;
 }
 
 .demo-alert-danger {
-  border-color: rgba(196, 71, 71, 0.3);
-  background: rgba(196, 71, 71, 0.1);
+  border-color: color-mix(in oklab, var(--destructive) 35%, var(--line));
+  background: var(--geist-red-100);
 }
 
 .demo-code-block {
   border: 1px solid var(--line);
-  border-radius: 1rem;
-  background: color-mix(in oklab, var(--chip-bg) 88%, transparent);
-  color: var(--sea-ink);
+  border-radius: 0.75rem;
+  background: var(--geist-gray-alpha-100);
+  color: var(--foreground);
   padding: 1rem;
 }
 
 .demo-table-shell {
   overflow-x: auto;
   border: 1px solid var(--line);
-  border-radius: 1rem;
-  background: color-mix(in oklab, var(--surface-strong) 78%, transparent);
+  border-radius: 0.75rem;
+  background: var(--background);
 }
 
 .demo-table {
   width: 100%;
   border-collapse: collapse;
-  color: var(--sea-ink);
+  color: var(--foreground);
 }
 
 .demo-table th,
@@ -436,29 +475,29 @@ pre code {
 }
 
 .demo-table th {
-  background: color-mix(in oklab, var(--chip-bg) 88%, transparent);
-  color: var(--sea-ink);
-  font-weight: 700;
+  background: var(--geist-gray-alpha-100);
+  color: var(--foreground);
+  font-weight: 600;
 }
 
 .demo-table tr:hover td {
-  background: color-mix(in oklab, var(--lagoon) 8%, transparent);
+  background: var(--geist-gray-alpha-100);
 }
 
 button,
 .island-shell,
 a {
   transition:
-    background-color 180ms ease,
-    color 180ms ease,
-    border-color 180ms ease,
-    transform 180ms ease;
+    background-color 150ms cubic-bezier(0.175, 0.885, 0.32, 1.1),
+    color 150ms cubic-bezier(0.175, 0.885, 0.32, 1.1),
+    border-color 150ms cubic-bezier(0.175, 0.885, 0.32, 1.1),
+    transform 150ms cubic-bezier(0.175, 0.885, 0.32, 1.1);
 }
 
 .island-kicker {
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 0.69rem;
   color: var(--kicker);
 }
@@ -468,7 +507,7 @@ a {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
-  color: var(--sea-ink-soft);
+  color: var(--muted-foreground);
 }
 
 .nav-link::after {
@@ -477,16 +516,16 @@ a {
   left: 0;
   bottom: -6px;
   width: 100%;
-  height: 2px;
+  height: 1px;
   transform: scaleX(0);
   transform-origin: left;
-  background: linear-gradient(90deg, var(--lagoon), #7ed3bf);
-  transition: transform 170ms ease;
+  background: var(--foreground);
+  transition: transform 150ms cubic-bezier(0.175, 0.885, 0.32, 1.1);
 }
 
 .nav-link:hover,
 .nav-link.is-active {
-  color: var(--sea-ink);
+  color: var(--foreground);
 }
 
 .nav-link:hover::after,
@@ -502,11 +541,22 @@ a {
 
 .site-footer {
   border-top: 1px solid var(--line);
-  background: color-mix(in oklab, var(--header-bg) 84%, transparent 16%);
+  background: var(--background);
 }
 
 .rise-in {
-  animation: rise-in 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: rise-in 300ms cubic-bezier(0.175, 0.885, 0.32, 1.1) both;
+}
+
+.status-pulse {
+  animation: status-pulse 1800ms ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise-in,
+  .status-pulse {
+    animation: none;
+  }
 }
 
 @keyframes rise-in {
@@ -517,5 +567,18 @@ a {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes status-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0
+      color-mix(in oklab, var(--geist-green-700) 34%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 0 5px
+      color-mix(in oklab, var(--geist-green-700) 0%, transparent);
   }
 }
