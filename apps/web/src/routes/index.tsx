@@ -64,7 +64,7 @@ const agentClients = [
     status: "CLI-ready",
   },
   {
-    logo: "https://cdn.simpleicons.org/visualstudiocode/000000",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg",
     name: "VS Code",
     setup: "Use the same /v1 base URL in compatible extensions",
     status: "Extensions",
@@ -191,7 +191,9 @@ const AgentLogo = ({ logo, name }: { logo: string; name: string }) => (
   >
     <img
       alt={`${name} logo`}
-      className={`size-6 object-contain ${name === "Pi" ? "" : "dark:invert"}`}
+      className={`size-6 object-contain ${
+        name === "Pi" || name === "VS Code" ? "" : "dark:invert"
+      }`}
       loading="lazy"
       src={logo}
     />

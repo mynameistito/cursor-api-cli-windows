@@ -1,0 +1,94 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">cursor-api for Windows</title>
+  <desc id="desc">A dark terminal-inspired Open Graph card for cursor-api for Windows.</desc>
+  <defs>
+    <radialGradient id="heroGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(605 44) rotate(92) scale(505 870)">
+      <stop stop-color="#48AEFF" stop-opacity="0.38" />
+      <stop offset="0.55" stop-color="#1A66FF" stop-opacity="0.12" />
+      <stop offset="1" stop-color="#0A0A0A" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="card" x1="183" y1="86" x2="1014" y2="565" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#151515" />
+      <stop offset="1" stop-color="#090909" />
+    </linearGradient>
+    <linearGradient id="command" x1="694" y1="203" x2="953" y2="203" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#48AEFF" stop-opacity="0.2" />
+      <stop offset="1" stop-color="#4CE15E" stop-opacity="0.18" />
+    </linearGradient>
+    <pattern id="grid" width="54" height="54" patternUnits="userSpaceOnUse">
+      <path d="M54 0H0V54" stroke="#FFFFFF" stroke-opacity="0.055" />
+    </pattern>
+    <filter id="softShadow" x="132" y="54" width="936" height="566" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="28" stdDeviation="34" flood-color="#000000" flood-opacity="0.45" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0A0A0A" />
+  <rect width="1200" height="630" fill="url(#grid)" />
+  <rect width="1200" height="630" fill="url(#heroGlow)" />
+  <circle cx="1050" cy="122" r="166" fill="#48AEFF" fill-opacity="0.1" />
+  <circle cx="162" cy="505" r="184" fill="#4CE15E" fill-opacity="0.07" />
+
+  <g filter="url(#softShadow)">
+    <rect x="176" y="88" width="848" height="476" rx="34" fill="url(#card)" stroke="#FFFFFF" stroke-opacity="0.12" />
+    <rect x="176" y="88" width="848" height="66" rx="34" fill="#242424" />
+    <path d="M176 121C176 102.775 190.775 88 209 88H991C1009.23 88 1024 102.775 1024 121V154H176V121Z" fill="#252525" />
+    <path d="M176 154H1024" stroke="#FFFFFF" stroke-opacity="0.08" />
+
+    <g transform="translate(210 113)">
+      <circle cx="9" cy="9" r="7" fill="#FF5F56" />
+      <circle cx="33" cy="9" r="7" fill="#FFBD2E" />
+      <circle cx="57" cy="9" r="7" fill="#27C93F" />
+    </g>
+
+    <g transform="translate(210 196)">
+      <rect width="118" height="30" rx="15" fill="#48AEFF" fill-opacity="0.12" stroke="#48AEFF" stroke-opacity="0.35" />
+      <text x="20" y="20" fill="#A9D9FF" font-family="Geist Mono, Consolas, monospace" font-size="12" font-weight="500" letter-spacing="1.8">LOCALHOST</text>
+    </g>
+
+    <text x="210" y="290" fill="#F4F4F5" font-family="Geist Sans, Arial, sans-serif" font-size="64" font-weight="700" letter-spacing="-4.4">
+      <tspan x="210" dy="0">Cursor Composer</tspan>
+      <tspan x="210" dy="70">for local agents.</tspan>
+    </text>
+
+    <text x="214" y="422" fill="#A1A1AA" font-family="Geist Sans, Arial, sans-serif" font-size="24" font-weight="400" letter-spacing="-0.6">
+      <tspan x="214" dy="0">Expose Composer 2.5 through one Windows</tspan>
+      <tspan x="214" dy="34">daemon and an OpenAI-compatible API.</tspan>
+    </text>
+
+    <g transform="translate(214 489)">
+      <rect width="318" height="44" rx="22" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.13" />
+      <text x="23" y="29" fill="#EDEDED" font-family="Geist Mono, Consolas, monospace" font-size="16" font-weight="500">irm .../install.ps1 | iex</text>
+    </g>
+
+    <g transform="translate(652 198)">
+      <rect width="302" height="246" rx="24" fill="#080808" stroke="#FFFFFF" stroke-opacity="0.11" />
+      <rect x="20" y="22" width="112" height="28" rx="8" fill="#111827" stroke="#48AEFF" stroke-opacity="0.32" />
+      <text x="37" y="42" fill="#8BC7FF" font-family="Geist Mono, Consolas, monospace" font-size="13" font-weight="500">PowerShell</text>
+      <text x="22" y="88" fill="#71717A" font-family="Geist Mono, Consolas, monospace" font-size="14">PS C:\Users\dev&gt;</text>
+      <rect x="22" y="111" width="258" height="34" rx="8" fill="url(#command)" stroke="#48AEFF" stroke-opacity="0.22" />
+      <text x="39" y="133" fill="#F4F4F5" font-family="Geist Mono, Consolas, monospace" font-size="13">cursor-api start</text>
+      <rect x="22" y="161" width="124" height="46" rx="13" fill="#FFFFFF" fill-opacity="0.045" stroke="#FFFFFF" stroke-opacity="0.1" />
+      <rect x="156" y="161" width="124" height="46" rx="13" fill="#FFFFFF" fill-opacity="0.045" stroke="#FFFFFF" stroke-opacity="0.1" />
+      <text x="42" y="190" fill="#48AEFF" font-family="Geist Mono, Consolas, monospace" font-size="14">/v1</text>
+      <text x="177" y="190" fill="#4CE15E" font-family="Geist Mono, Consolas, monospace" font-size="14">daemon</text>
+    </g>
+  </g>
+
+  <g transform="translate(792 476)">
+    <rect width="60" height="60" rx="20" fill="#111111" stroke="#FFFFFF" stroke-opacity="0.13" />
+    <text x="18" y="39" fill="#48AEFF" font-family="Geist Mono, Consolas, monospace" font-size="19" font-weight="700">&gt;_</text>
+  </g>
+  <g transform="translate(866 476)">
+    <rect width="60" height="60" rx="20" fill="#111111" stroke="#FFFFFF" stroke-opacity="0.13" />
+    <text x="17" y="39" fill="#F4F4F5" font-family="Geist Sans, Arial, sans-serif" font-size="21" font-weight="700">AI</text>
+  </g>
+  <g transform="translate(940 476)">
+    <rect width="60" height="60" rx="20" fill="#111111" stroke="#FFFFFF" stroke-opacity="0.13" />
+    <path d="M18 31L29 20L44 27V43L29 50L18 39L26 31L18 23V31Z" fill="#007ACC" />
+    <path d="M29 20L44 14V48L29 50V20Z" fill="#0065A9" fill-opacity="0.95" />
+  </g>
+
+  <text x="90" y="584" fill="#71717A" font-family="Geist Mono, Consolas, monospace" font-size="15">cursor-api-windows.mynameistito.com</text>
+  <text x="918" y="584" fill="#71717A" font-family="Geist Mono, Consolas, monospace" font-size="15">OpenAI shape | Windows native</text>
+</svg>
