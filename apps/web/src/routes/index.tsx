@@ -343,7 +343,7 @@ const App = () => (
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button
             asChild
-            className="rounded-full px-6 shadow-[0_16px_40px_rgba(0,107,255,0.18)] active:translate-y-px"
+            className="rounded-full px-6 text-primary-foreground no-underline shadow-[0_16px_40px_rgba(0,107,255,0.18)] hover:text-primary-foreground active:translate-y-px"
             size="lg"
           >
             <a href={releasesUrl} rel="noreferrer" target="_blank">
