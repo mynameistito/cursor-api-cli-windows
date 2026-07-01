@@ -15,8 +15,8 @@ export const Header = () => (
           to="/"
           className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground no-underline shadow-[0_2px_2px_rgba(0,0,0,0.04)]"
         >
-          <span className="h-2 w-2 rounded-full bg-[#006bff]" />
-          cursor-api
+          <span className="h-2 w-2 rounded-full bg-[var(--geist-blue-700)]" />
+          cursor-api-windows
         </Link>
       </h2>
 
